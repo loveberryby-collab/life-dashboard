@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { ChevronLeft, ChevronRight, Loader2, Save } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Loader2, Save, Trash2 } from 'lucide-react'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import { toast } from 'sonner'
 import { getToday, formatDateRu, formatDateShort } from '@/lib/utils/date'
@@ -17,6 +17,22 @@ interface MoodLog {
   energy_score: number | null
   anxiety_score: number | null
   note: string | null
+}
+
+type Period = 'week' | 'month' | 'quarter' | 'year'
+
+const PERIOD_LABELS: Record<Period, string> = {
+  week: 'Неделя',
+  month: 'Месяц',
+  quarter: 'Квартал',
+  year: 'Год',
+}
+
+const PERIOD_DAYS: Record<Period, number> = {
+  week: 7,
+  month: 30,
+  quarter: 90,
+  year: 365,
 }
 
 function ScoreSlider({ label, value, onChange, emoji }: {
@@ -50,6 +66,21 @@ function ScoreSlider({ label, value, onChange, emoji }: {
   )
 }
 
+function shortDate(dateStr: string): string {
+  const d = new Date(dateStr + 'T00:00:00')
+  return `${d.getDate()}.${String(d.getMonth() + 1).padStart(2, '0')}`
+}
+
+const chartTooltipStyle = {
+  contentStyle: {
+    background: 'rgba(6, 24, 38, 0.95)',
+    border: '1px solid rgba(88,201,243,0.12)',
+    borderRadius: '6px',
+    color: '#BDE5FF',
+    fontSize: '12px',
+  },
+}
+
 export default function MoodPage() {
   const [date, setDate] = useState(getToday())
   const [mood, setMood] = useState(5)
@@ -60,6 +91,7 @@ export default function MoodPage() {
   const [loading, setLoading] = useState(true)
   const [history, setHistory] = useState<MoodLog[]>([])
   const [reloadKey, setReloadKey] = useState(0)
+  const [period, setPeriod] = useState<Period>('week')
   const supabase = createClient()
 
   useEffect(() => {
@@ -67,9 +99,13 @@ export default function MoodPage() {
     async function fetchData() {
       setLoading(true)
 
+      const startDate = new Date()
+      startDate.setDate(startDate.getDate() - PERIOD_DAYS[period])
+      const startStr = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}`
+
       const [todayRes, historyRes] = await Promise.all([
         supabase.from('mood_logs').select('*').eq('date', date).limit(1),
-        supabase.from('mood_logs').select('*').order('date', { ascending: false }).limit(14),
+        supabase.from('mood_logs').select('*').gte('date', startStr).order('date', { ascending: false }),
       ])
 
       if (cancelled) return
@@ -94,7 +130,7 @@ export default function MoodPage() {
     }
     fetchData()
     return () => { cancelled = true }
-  }, [date, reloadKey]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [date, reloadKey, period]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function shiftDate(days: number) {
     const d = new Date(date + 'T00:00:00')
@@ -135,6 +171,19 @@ export default function MoodPage() {
     setReloadKey((k) => k + 1)
   }
 
+  async function handleDelete(id: string) {
+    await supabase.from('mood_logs').delete().eq('id', id)
+    toast.success('Запись удалена')
+    if (id === existingId) {
+      setExistingId(null)
+      setMood(5)
+      setEnergy(5)
+      setAnxiety(5)
+      setNote('')
+    }
+    setReloadKey((k) => k + 1)
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-[60vh]">
@@ -142,6 +191,20 @@ export default function MoodPage() {
       </div>
     )
   }
+
+  const chartData = [...history].reverse().map((h) => ({
+    date: shortDate(h.date),
+    mood: h.mood_score,
+    energy: h.energy_score,
+    anxiety: h.anxiety_score,
+  }))
+
+  const moodEntries = history.filter((m) => m.mood_score !== null)
+  const energyEntries = history.filter((m) => m.energy_score !== null)
+  const anxietyEntries = history.filter((m) => m.anxiety_score !== null)
+  const avgMood = moodEntries.length > 0 ? (moodEntries.reduce((s, m) => s + (m.mood_score ?? 0), 0) / moodEntries.length).toFixed(1) : '—'
+  const avgEnergy = energyEntries.length > 0 ? (energyEntries.reduce((s, m) => s + (m.energy_score ?? 0), 0) / energyEntries.length).toFixed(1) : '—'
+  const avgAnxiety = anxietyEntries.length > 0 ? (anxietyEntries.reduce((s, m) => s + (m.anxiety_score ?? 0), 0) / anxietyEntries.length).toFixed(1) : '—'
 
   return (
     <div className="p-4 md:p-8 max-w-3xl mx-auto">
@@ -180,16 +243,47 @@ export default function MoodPage() {
           </Button>
       </div>
 
+      {/* Period switcher */}
+      <div className="flex gap-2 mb-4">
+        {(['week', 'month', 'quarter', 'year'] as Period[]).map((p) => (
+          <Button
+            key={p}
+            variant={period === p ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setPeriod(p)}
+            className="rounded-md text-xs"
+          >
+            {PERIOD_LABELS[p]}
+          </Button>
+        ))}
+      </div>
+
+      {/* Average stats */}
+      <div className="grid grid-cols-3 gap-3 mb-4">
+        <div className="glass-card rounded-md p-3 text-center">
+          <p className="text-lg font-bold text-blue-300">{avgMood}</p>
+          <p className="text-xs text-muted-foreground mt-1">Настроение</p>
+        </div>
+        <div className="glass-card rounded-md p-3 text-center">
+          <p className="text-lg font-bold text-teal-400">{avgEnergy}</p>
+          <p className="text-xs text-muted-foreground mt-1">Энергия</p>
+        </div>
+        <div className="glass-card rounded-md p-3 text-center">
+          <p className="text-lg font-bold text-sky-400">{avgAnxiety}</p>
+          <p className="text-xs text-muted-foreground mt-1">Тревожность</p>
+        </div>
+      </div>
+
       {/* Mood chart */}
-      {history.length > 1 && (
+      {chartData.length > 1 && (
         <div className="glass-card rounded-md p-4 mb-4">
           <p className="text-sm text-muted-foreground mb-3">Тренды настроения</p>
           <ResponsiveContainer width="100%" height={200}>
-            <AreaChart data={[...history].reverse().map((h) => ({ date: formatDateShort(h.date), mood: h.mood_score, energy: h.energy_score, anxiety: h.anxiety_score }))}>
+            <AreaChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(88,201,243,0.08)" />
               <XAxis dataKey="date" tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, 10]} />
-              <Tooltip contentStyle={{ background: 'rgba(6,24,38,0.95)', border: '1px solid rgba(88,201,243,0.12)', borderRadius: '6px', color: '#BDE5FF', fontSize: '12px' }} />
+              <Tooltip {...chartTooltipStyle} />
               <defs>
                 <linearGradient id="moodG" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#58C9F3" stopOpacity={0.3} />
@@ -219,12 +313,18 @@ export default function MoodPage() {
           <div className="space-y-2">
             {history.map((log) => (
               <div key={log.id} className="flex items-center justify-between py-2 border-b border-white/[0.08] last:border-0">
-                <span className="text-sm text-muted-foreground">{formatDateShort(log.date)}</span>
-                <div className="flex gap-3 text-xs">
-                  <span>😊 {log.mood_score ?? '—'}</span>
-                  <span>⚡ {log.energy_score ?? '—'}</span>
-                  <span>😰 {log.anxiety_score ?? '—'}</span>
+                <div className="flex-1 min-w-0">
+                  <span className="text-sm text-muted-foreground">{formatDateShort(log.date)}</span>
+                  <div className="flex gap-3 text-xs mt-0.5">
+                    <span>😊 {log.mood_score ?? '—'}</span>
+                    <span>⚡ {log.energy_score ?? '—'}</span>
+                    <span>😰 {log.anxiety_score ?? '—'}</span>
+                  </div>
+                  {log.note && <p className="text-xs text-muted-foreground mt-0.5 truncate">{log.note}</p>}
                 </div>
+                <button onClick={() => handleDelete(log.id)} className="p-1.5 rounded-lg hover:bg-white/[0.06] transition shrink-0 ml-2">
+                  <Trash2 className="w-3.5 h-3.5 text-muted-foreground" />
+                </button>
               </div>
             ))}
           </div>

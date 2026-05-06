@@ -170,11 +170,15 @@ export default function DayPlansPage() {
     setReloadKey((k) => k + 1)
   }
 
-  const filtered = tasks.filter((t) => {
-    if (filter === 'active') return !t.is_completed
-    if (filter === 'completed') return t.is_completed
-    return true
-  })
+  const priorityOrder: Record<string, number> = { high: 0, medium: 1, low: 2 }
+
+  const filtered = tasks
+    .filter((t) => {
+      if (filter === 'active') return !t.is_completed
+      if (filter === 'completed') return t.is_completed
+      return true
+    })
+    .sort((a, b) => (priorityOrder[a.priority] ?? 1) - (priorityOrder[b.priority] ?? 1))
 
   return (
     <div className="p-4 md:p-8 max-w-3xl mx-auto">

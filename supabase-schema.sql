@@ -132,9 +132,13 @@ create table if not exists body_measurements (
   belly numeric,
   thigh numeric,
   arm numeric,
+  calf numeric,
   notes text,
   created_at timestamptz default now()
 );
+
+-- Run this if body_measurements table already exists:
+-- alter table body_measurements add column if not exists calf numeric;
 
 alter table body_measurements enable row level security;
 

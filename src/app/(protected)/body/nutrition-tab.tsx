@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Progress } from '@/components/ui/progress'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Plus, Trash2, Loader2 } from 'lucide-react'
+import { Plus, Trash2, Loader2, Settings } from 'lucide-react'
 import { toast } from 'sonner'
 import { getToday } from '@/lib/utils/date'
 
@@ -25,6 +25,13 @@ interface Meal {
   notes: string | null
 }
 
+interface NutritionGoals {
+  calories: number
+  protein: number
+  fat: number
+  carbs: number
+}
+
 const MEAL_TYPES: Record<string, string> = {
   breakfast: 'Завтрак',
   lunch: 'Обед',
@@ -32,12 +39,14 @@ const MEAL_TYPES: Record<string, string> = {
   snack: 'Перекус',
 }
 
-const GOALS = { calories: 1500, protein: 90, fat: 45, carbs: 170 }
+const DEFAULT_GOALS: NutritionGoals = { calories: 1500, protein: 90, fat: 45, carbs: 170 }
+const GOALS_KEY = 'nutrition-goals'
 
 export default function NutritionTab() {
   const [meals, setMeals] = useState<Meal[]>([])
   const [loading, setLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [goalsDialogOpen, setGoalsDialogOpen] = useState(false)
   const [mealType, setMealType] = useState('breakfast')
   const [title, setTitle] = useState('')
   const [calories, setCalories] = useState('')
@@ -48,6 +57,14 @@ export default function NutritionTab() {
   const [reloadKey, setReloadKey] = useState(0)
   const supabase = createClient()
   const today = getToday()
+
+  const [goals, setGoals] = useState<NutritionGoals>(() => {
+    if (typeof window === 'undefined') return DEFAULT_GOALS
+    const saved = localStorage.getItem(GOALS_KEY)
+    return saved ? JSON.parse(saved) : DEFAULT_GOALS
+  })
+
+  const [editGoals, setEditGoals] = useState<NutritionGoals>(goals)
 
   useEffect(() => {
     let cancelled = false
@@ -105,6 +122,18 @@ export default function NutritionTab() {
     setReloadKey((k) => k + 1)
   }
 
+  function openGoals() {
+    setEditGoals({ ...goals })
+    setGoalsDialogOpen(true)
+  }
+
+  function saveGoals() {
+    setGoals(editGoals)
+    localStorage.setItem(GOALS_KEY, JSON.stringify(editGoals))
+    setGoalsDialogOpen(false)
+    toast.success('Нормы КБЖУ обновлены')
+  }
+
   const totals = meals.reduce(
     (acc, m) => ({
       calories: acc.calories + Number(m.calories),
@@ -124,12 +153,17 @@ export default function NutritionTab() {
       {/* Summary */}
       <div className="glass-card rounded-md mb-4">
         <div className="p-4 space-y-3">
-          <h3 className="font-semibold text-sm">Итого за день</h3>
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold text-sm">Итого за день</h3>
+            <button onClick={openGoals} className="p-1.5 rounded-lg hover:bg-white/[0.06] transition" title="Настроить нормы КБЖУ">
+              <Settings className="w-4 h-4 text-muted-foreground" />
+            </button>
+          </div>
           {[
-            { label: 'Калории', current: totals.calories, goal: GOALS.calories, unit: 'ккал', color: 'bg-orange-400' },
-            { label: 'Белки', current: totals.protein, goal: GOALS.protein, unit: 'г', color: 'bg-red-400' },
-            { label: 'Жиры', current: totals.fat, goal: GOALS.fat, unit: 'г', color: 'bg-yellow-400' },
-            { label: 'Углеводы', current: totals.carbs, goal: GOALS.carbs, unit: 'г', color: 'bg-blue-400' },
+            { label: 'Калории', current: totals.calories, goal: goals.calories, unit: 'ккал', color: 'bg-orange-400' },
+            { label: 'Белки', current: totals.protein, goal: goals.protein, unit: 'г', color: 'bg-red-400' },
+            { label: 'Жиры', current: totals.fat, goal: goals.fat, unit: 'г', color: 'bg-yellow-400' },
+            { label: 'Углеводы', current: totals.carbs, goal: goals.carbs, unit: 'г', color: 'bg-blue-400' },
           ].map((item) => (
             <div key={item.label}>
               <div className="flex justify-between text-xs mb-1">
@@ -180,6 +214,7 @@ export default function NutritionTab() {
         </div>
       )}
 
+      {/* Add meal dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="rounded-md glass-strong border-white/[0.1]">
           <DialogHeader>
@@ -224,6 +259,34 @@ export default function NutritionTab() {
               <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
             </div>
             <Button onClick={handleAdd} className="w-full rounded-md">Добавить</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Goals settings dialog */}
+      <Dialog open={goalsDialogOpen} onOpenChange={setGoalsDialogOpen}>
+        <DialogContent className="rounded-md glass-strong border-white/[0.1]">
+          <DialogHeader>
+            <DialogTitle>Дневная норма КБЖУ</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Калории (ккал)</Label>
+              <Input type="number" value={editGoals.calories} onChange={(e) => setEditGoals({ ...editGoals, calories: Number(e.target.value) || 0 })} className="rounded-md bg-white/[0.06] border-white/[0.1]" />
+            </div>
+            <div className="space-y-2">
+              <Label>Белки (г)</Label>
+              <Input type="number" value={editGoals.protein} onChange={(e) => setEditGoals({ ...editGoals, protein: Number(e.target.value) || 0 })} className="rounded-md bg-white/[0.06] border-white/[0.1]" />
+            </div>
+            <div className="space-y-2">
+              <Label>Жиры (г)</Label>
+              <Input type="number" value={editGoals.fat} onChange={(e) => setEditGoals({ ...editGoals, fat: Number(e.target.value) || 0 })} className="rounded-md bg-white/[0.06] border-white/[0.1]" />
+            </div>
+            <div className="space-y-2">
+              <Label>Углеводы (г)</Label>
+              <Input type="number" value={editGoals.carbs} onChange={(e) => setEditGoals({ ...editGoals, carbs: Number(e.target.value) || 0 })} className="rounded-md bg-white/[0.06] border-white/[0.1]" />
+            </div>
+            <Button onClick={saveGoals} className="w-full rounded-md">Сохранить</Button>
           </div>
         </DialogContent>
       </Dialog>
