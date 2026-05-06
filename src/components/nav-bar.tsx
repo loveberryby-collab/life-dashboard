@@ -28,10 +28,10 @@ export default function NavBar() {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex fixed left-0 top-0 h-full w-56 bg-card border-r border-border flex-col p-4 z-40">
+      <aside className="hidden md:flex fixed left-0 top-0 h-full w-56 glass border-r border-white/[0.08] flex-col p-4 z-40">
         <div className="flex items-center gap-2 mb-8 px-2">
-          <div className="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center">
-            <span className="text-primary text-sm font-bold">L</span>
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center gradient-purple glow-purple">
+            <span className="text-white text-sm font-bold">L</span>
           </div>
           <span className="font-bold text-foreground">Life Dashboard</span>
         </div>
@@ -41,10 +41,10 @@ export default function NavBar() {
               key={href}
               href={href}
               className={cn(
-                'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors',
+                'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
                 pathname === href
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                  ? 'bg-primary/20 text-primary shadow-[0_0_12px_rgba(124,91,245,0.15)]'
+                  : 'text-muted-foreground hover:bg-white/[0.06] hover:text-foreground'
               )}
             >
               <Icon className="w-5 h-5" />
@@ -54,7 +54,7 @@ export default function NavBar() {
         </nav>
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:bg-white/[0.06] hover:text-foreground transition-all duration-200"
         >
           <LogOut className="w-5 h-5" />
           Выйти
@@ -62,15 +62,15 @@ export default function NavBar() {
       </aside>
 
       {/* Mobile bottom nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50 safe-area-bottom">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 glass border-t border-white/[0.08] z-50 safe-area-bottom">
         <div className="flex justify-around py-2">
           {links.map(({ href, label, icon: Icon }) => (
             <Link
               key={href}
               href={href}
               className={cn(
-                'flex flex-col items-center gap-0.5 px-2 py-1 text-xs font-medium transition-colors',
-                pathname === href ? 'text-primary' : 'text-muted-foreground'
+                'flex flex-col items-center gap-0.5 px-2 py-1 text-xs font-medium transition-all duration-200',
+                pathname === href ? 'text-primary drop-shadow-[0_0_6px_rgba(124,91,245,0.4)]' : 'text-muted-foreground'
               )}
             >
               <Icon className="w-5 h-5" />

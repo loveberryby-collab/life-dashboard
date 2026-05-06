@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -27,7 +26,7 @@ interface HabitLog {
   is_completed: boolean
 }
 
-const HABIT_COLORS = ['#D9A7A0', '#A8D5BA', '#8ECAE6', '#FFB4A2', '#C3B1E1', '#F9C74F']
+const HABIT_COLORS = ['#7c5bf5', '#38bdb9', '#f472b6', '#a78bfa', '#5eead4', '#fbbf24']
 
 export default function HabitsPage() {
   const [habits, setHabits] = useState<Habit[]>([])
@@ -139,40 +138,35 @@ export default function HabitsPage() {
       <p className="text-sm text-muted-foreground mb-2">{formatDateRu(today)}</p>
 
       {/* Progress */}
-      <Card className="border-0 shadow-sm rounded-2xl mb-4">
-        <CardContent className="p-4">
-          <div className="flex justify-between text-sm mb-2">
-            <span className="text-muted-foreground">Прогресс за сегодня</span>
-            <span className="font-semibold">{completed} / {total}</span>
-          </div>
-          <Progress value={progressPct} className="h-3" />
-        </CardContent>
-      </Card>
+      <div className="glass-card rounded-2xl p-4 mb-4">
+        <div className="flex justify-between text-sm mb-2">
+          <span className="text-muted-foreground">Прогресс за сегодня</span>
+          <span className="font-semibold">{completed} / {total}</span>
+        </div>
+        <Progress value={progressPct} className="h-3" />
+      </div>
 
       {habits.length === 0 ? (
-        <Card className="border-0 shadow-sm rounded-2xl">
-          <CardContent className="p-8 text-center">
-            <p className="text-muted-foreground">Добавьте свою первую привычку</p>
-          </CardContent>
-        </Card>
+        <div className="glass-card rounded-2xl p-8 text-center">
+          <p className="text-muted-foreground">Добавьте свою первую привычку</p>
+        </div>
       ) : (
         <div className="space-y-2">
           {habits.map((habit) => {
             const isCompleted = logs.some((l) => l.habit_id === habit.id)
             return (
-              <Card key={habit.id} className="border-0 shadow-sm rounded-2xl">
-                <CardContent className="p-4 flex items-center gap-3">
+              <div key={habit.id} className="glass-card rounded-2xl p-4 flex items-center gap-3">
                   <button
                     onClick={() => toggleHabit(habit.id)}
                     className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition"
                     style={{
-                      backgroundColor: isCompleted ? (habit.color ?? '#D9A7A0') : `${habit.color ?? '#D9A7A0'}20`,
+                      backgroundColor: isCompleted ? (habit.color ?? '#7c5bf5') : `${habit.color ?? '#7c5bf5'}20`,
                     }}
                   >
                     {isCompleted ? (
                       <Check className="w-5 h-5 text-white" />
                     ) : (
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: habit.color ?? '#D9A7A0' }} />
+                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: habit.color ?? '#7c5bf5' }} />
                     )}
                   </button>
                   <div className="flex-1 min-w-0">
@@ -184,33 +178,32 @@ export default function HabitsPage() {
                     )}
                   </div>
                   <div className="flex gap-1 shrink-0">
-                    <button onClick={() => openEdit(habit)} className="p-1.5 rounded-lg hover:bg-muted transition">
+                    <button onClick={() => openEdit(habit)} className="p-1.5 rounded-lg hover:bg-white/[0.06] transition">
                       <Pencil className="w-4 h-4 text-muted-foreground" />
                     </button>
-                    <button onClick={() => deleteHabit(habit.id)} className="p-1.5 rounded-lg hover:bg-muted transition">
+                    <button onClick={() => deleteHabit(habit.id)} className="p-1.5 rounded-lg hover:bg-white/[0.06] transition">
                       <Trash2 className="w-4 h-4 text-muted-foreground" />
                     </button>
                   </div>
-                </CardContent>
-              </Card>
+              </div>
             )
           })}
         </div>
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="rounded-2xl">
+        <DialogContent className="rounded-2xl glass-strong border-white/[0.1]">
           <DialogHeader>
             <DialogTitle>{editingHabit ? 'Редактировать привычку' : 'Новая привычка'}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
               <Label>Название</Label>
-              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Например: Медитация" className="rounded-xl" />
+              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Например: Медитация" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="space-y-2">
               <Label>Описание</Label>
-              <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Необязательно" className="rounded-xl" />
+              <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Необязательно" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="space-y-2">
               <Label>Цвет</Label>
@@ -220,7 +213,7 @@ export default function HabitsPage() {
                     key={c}
                     onClick={() => setColor(c)}
                     className="w-8 h-8 rounded-full transition ring-2 ring-offset-2"
-                    style={{ backgroundColor: c, outline: color === c ? `2px solid ${c}` : '2px solid transparent', outlineOffset: '2px' }}
+                    style={{ backgroundColor: c, outline: color === c ? `2px solid ${c}` : '2px solid transparent', outlineOffset: '2px', boxShadow: color === c ? `0 0 8px ${c}50` : 'none' }}
                   />
                 ))}
               </div>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Card, CardContent } from '@/components/ui/card'
+
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -122,8 +122,8 @@ export default function NutritionTab() {
   return (
     <div>
       {/* Summary */}
-      <Card className="border-0 shadow-sm rounded-2xl mb-4">
-        <CardContent className="p-4 space-y-3">
+      <div className="glass-card rounded-2xl mb-4">
+        <div className="p-4 space-y-3">
           <h3 className="font-semibold text-sm">Итого за день</h3>
           {[
             { label: 'Калории', current: totals.calories, goal: GOALS.calories, unit: 'ккал', color: 'bg-orange-400' },
@@ -141,24 +141,24 @@ export default function NutritionTab() {
               <Progress value={Math.min((item.current / item.goal) * 100, 100)} className="h-2" />
             </div>
           ))}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       <Button onClick={openAdd} className="w-full rounded-xl gap-1 mb-4">
         <Plus className="w-4 h-4" /> Добавить приём пищи
       </Button>
 
       {meals.length === 0 ? (
-        <Card className="border-0 shadow-sm rounded-2xl">
-          <CardContent className="p-8 text-center">
+        <div className="glass-card rounded-2xl">
+          <div className="p-8 text-center">
             <p className="text-muted-foreground">Нет записей о питании за сегодня</p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       ) : (
         <div className="space-y-2">
           {meals.map((meal) => (
-            <Card key={meal.id} className="border-0 shadow-sm rounded-2xl">
-              <CardContent className="p-4 flex items-start justify-between">
+            <div key={meal.id} className="glass-card rounded-2xl">
+              <div className="p-4 flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-md">
@@ -171,17 +171,17 @@ export default function NutritionTab() {
                   </p>
                   {meal.notes && <p className="text-xs text-muted-foreground mt-0.5">{meal.notes}</p>}
                 </div>
-                <button onClick={() => deleteMeal(meal.id)} className="p-1.5 rounded-lg hover:bg-muted transition shrink-0">
+                <button onClick={() => deleteMeal(meal.id)} className="p-1.5 rounded-lg hover:bg-white/[0.06] transition shrink-0">
                   <Trash2 className="w-4 h-4 text-muted-foreground" />
                 </button>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           ))}
         </div>
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="rounded-2xl">
+        <DialogContent className="rounded-2xl glass-strong border-white/[0.1]">
           <DialogHeader>
             <DialogTitle>Добавить приём пищи</DialogTitle>
           </DialogHeader>
@@ -189,7 +189,7 @@ export default function NutritionTab() {
             <div className="space-y-2">
               <Label>Тип</Label>
               <Select value={mealType} onValueChange={(v) => { if (v) setMealType(v) }}>
-                <SelectTrigger className="rounded-xl"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="rounded-xl bg-white/[0.06] border-white/[0.1]"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {Object.entries(MEAL_TYPES).map(([k, v]) => (
                     <SelectItem key={k} value={k}>{v}</SelectItem>
@@ -199,29 +199,29 @@ export default function NutritionTab() {
             </div>
             <div className="space-y-2">
               <Label>Название</Label>
-              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Овсянка с бананом" className="rounded-xl" />
+              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Овсянка с бананом" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
                 <Label className="text-xs">Калории</Label>
-                <Input type="number" value={calories} onChange={(e) => setCalories(e.target.value)} placeholder="0" className="rounded-xl" />
+                <Input type="number" value={calories} onChange={(e) => setCalories(e.target.value)} placeholder="0" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
               </div>
               <div className="space-y-1">
                 <Label className="text-xs">Белки (г)</Label>
-                <Input type="number" value={protein} onChange={(e) => setProtein(e.target.value)} placeholder="0" className="rounded-xl" />
+                <Input type="number" value={protein} onChange={(e) => setProtein(e.target.value)} placeholder="0" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
               </div>
               <div className="space-y-1">
                 <Label className="text-xs">Жиры (г)</Label>
-                <Input type="number" value={fat} onChange={(e) => setFat(e.target.value)} placeholder="0" className="rounded-xl" />
+                <Input type="number" value={fat} onChange={(e) => setFat(e.target.value)} placeholder="0" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
               </div>
               <div className="space-y-1">
                 <Label className="text-xs">Углеводы (г)</Label>
-                <Input type="number" value={carbs} onChange={(e) => setCarbs(e.target.value)} placeholder="0" className="rounded-xl" />
+                <Input type="number" value={carbs} onChange={(e) => setCarbs(e.target.value)} placeholder="0" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
               </div>
             </div>
             <div className="space-y-2">
               <Label>Заметка</Label>
-              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-xl" />
+              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
             </div>
             <Button onClick={handleAdd} className="w-full rounded-xl">Добавить</Button>
           </div>

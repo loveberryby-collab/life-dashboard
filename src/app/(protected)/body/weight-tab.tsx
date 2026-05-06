@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Card, CardContent } from '@/components/ui/card'
+
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -76,14 +76,14 @@ export default function WeightTab() {
   return (
     <div>
       {/* Last weight */}
-      <Card className="border-0 shadow-sm rounded-2xl mb-4">
-        <CardContent className="p-6 text-center">
+      <div className="glass-card rounded-2xl mb-4">
+        <div className="p-6 text-center">
           {latest ? (
             <>
               <p className="text-3xl font-bold">{Number(latest.weight)} кг</p>
               <p className="text-sm text-muted-foreground mt-1">Последний вес · {formatDateShort(latest.date)}</p>
               {diff !== null && diff !== 0 && (
-                <div className={`flex items-center justify-center gap-1 mt-2 text-sm ${diff < 0 ? 'text-green-600' : 'text-red-500'}`}>
+                <div className={`flex items-center justify-center gap-1 mt-2 text-sm ${diff < 0 ? 'text-green-400' : 'text-red-400'}`}>
                   {diff < 0 ? <TrendingDown className="w-4 h-4" /> : <TrendingUp className="w-4 h-4" />}
                   {diff > 0 ? '+' : ''}{diff.toFixed(1)} кг
                 </div>
@@ -97,8 +97,8 @@ export default function WeightTab() {
           ) : (
             <p className="text-muted-foreground">Нет записей о весе</p>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       <Button onClick={() => setDialogOpen(true)} className="w-full rounded-xl gap-1 mb-4">
         <Plus className="w-4 h-4" /> Записать вес
@@ -106,8 +106,8 @@ export default function WeightTab() {
 
       {/* History */}
       {logs.length > 0 && (
-        <Card className="border-0 shadow-sm rounded-2xl">
-          <CardContent className="p-4">
+        <div className="glass-card rounded-2xl">
+          <div className="p-4">
             <h3 className="font-semibold text-sm mb-3">История</h3>
             <div className="space-y-2">
               {logs.map((log) => (
@@ -117,27 +117,27 @@ export default function WeightTab() {
                 </div>
               ))}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="rounded-2xl">
+        <DialogContent className="rounded-2xl glass-strong border-white/[0.1]">
           <DialogHeader>
             <DialogTitle>Записать вес</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
               <Label>Дата</Label>
-              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="rounded-xl" />
+              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="space-y-2">
               <Label>Вес (кг)</Label>
-              <Input type="number" step="0.1" value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="65.0" className="rounded-xl" />
+              <Input type="number" step="0.1" value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="65.0" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="space-y-2">
               <Label>Заметка</Label>
-              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-xl" />
+              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
             </div>
             <Button onClick={handleAdd} className="w-full rounded-xl">Записать</Button>
           </div>

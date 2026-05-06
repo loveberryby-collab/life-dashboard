@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Card, CardContent } from '@/components/ui/card'
+
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -24,9 +24,9 @@ interface Task {
 }
 
 const priorityColors = {
-  low: 'bg-blue-100 text-blue-700',
-  medium: 'bg-yellow-100 text-yellow-700',
-  high: 'bg-red-100 text-red-700',
+  low: 'bg-blue-500/20 text-blue-300',
+  medium: 'bg-yellow-500/20 text-yellow-300',
+  high: 'bg-red-500/20 text-red-300',
 }
 
 const priorityLabels = { low: 'Низкий', medium: 'Средний', high: 'Высокий' }
@@ -142,12 +142,12 @@ export default function DayPlansPage() {
       </div>
 
       {/* Date picker */}
-      <div className="flex items-center justify-between bg-card rounded-2xl shadow-sm px-4 py-3 mb-4">
-        <button onClick={() => shiftDate(-1)} className="p-2 rounded-full hover:bg-muted transition">
+      <div className="flex items-center justify-between glass rounded-2xl px-4 py-3 mb-4">
+        <button onClick={() => shiftDate(-1)} className="p-2 rounded-full hover:bg-white/[0.06] transition">
           <ChevronLeft className="w-5 h-5 text-primary" />
         </button>
         <span className="text-sm font-semibold">{formatDateRu(date)}</span>
-        <button onClick={() => shiftDate(1)} className="p-2 rounded-full hover:bg-muted transition">
+        <button onClick={() => shiftDate(1)} className="p-2 rounded-full hover:bg-white/[0.06] transition">
           <ChevronRight className="w-5 h-5 text-primary" />
         </button>
       </div>
@@ -172,18 +172,15 @@ export default function DayPlansPage() {
           <Loader2 className="w-6 h-6 animate-spin text-primary" />
         </div>
       ) : filtered.length === 0 ? (
-        <Card className="border-0 shadow-sm rounded-2xl">
-          <CardContent className="p-8 text-center">
-            <p className="text-muted-foreground">
-              {filter === 'all' ? 'Нет задач на этот день' : filter === 'active' ? 'Нет активных задач' : 'Нет выполненных задач'}
-            </p>
-          </CardContent>
-        </Card>
+        <div className="glass-card rounded-2xl p-8 text-center">
+          <p className="text-muted-foreground">
+            {filter === 'all' ? 'Нет задач на этот день' : filter === 'active' ? 'Нет активных задач' : 'Нет выполненных задач'}
+          </p>
+        </div>
       ) : (
         <div className="space-y-2">
           {filtered.map((task) => (
-            <Card key={task.id} className="border-0 shadow-sm rounded-2xl">
-              <CardContent className="p-4 flex items-start gap-3">
+            <div key={task.id} className="glass-card rounded-2xl p-4 flex items-start gap-3">
                 <button
                   onClick={() => toggleComplete(task)}
                   className={`mt-0.5 w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition ${
@@ -210,38 +207,37 @@ export default function DayPlansPage() {
                   </Badge>
                 </div>
                 <div className="flex gap-1 shrink-0">
-                  <button onClick={() => openEdit(task)} className="p-1.5 rounded-lg hover:bg-muted transition">
+                  <button onClick={() => openEdit(task)} className="p-1.5 rounded-lg hover:bg-white/[0.06] transition">
                     <Pencil className="w-4 h-4 text-muted-foreground" />
                   </button>
-                  <button onClick={() => deleteTask(task.id)} className="p-1.5 rounded-lg hover:bg-muted transition">
+                  <button onClick={() => deleteTask(task.id)} className="p-1.5 rounded-lg hover:bg-white/[0.06] transition">
                     <Trash2 className="w-4 h-4 text-muted-foreground" />
                   </button>
                 </div>
-              </CardContent>
-            </Card>
+            </div>
           ))}
         </div>
       )}
 
       {/* Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="rounded-2xl">
+        <DialogContent className="rounded-2xl glass-strong border-white/[0.1]">
           <DialogHeader>
             <DialogTitle>{editingTask ? 'Редактировать задачу' : 'Новая задача'}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
               <Label>Название</Label>
-              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Что нужно сделать?" className="rounded-xl" />
+              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Что нужно сделать?" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="space-y-2">
               <Label>Описание</Label>
-              <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Подробности (необязательно)" className="rounded-xl" />
+              <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Подробности (необязательно)" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="space-y-2">
               <Label>Приоритет</Label>
               <Select value={priority} onValueChange={(v) => { if (v) setPriority(v as 'low' | 'medium' | 'high') }}>
-                <SelectTrigger className="rounded-xl">
+                <SelectTrigger className="rounded-xl bg-white/[0.06] border-white/[0.1]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>

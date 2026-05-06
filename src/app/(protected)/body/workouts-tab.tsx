@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Card, CardContent } from '@/components/ui/card'
+
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -100,16 +100,16 @@ export default function WorkoutsTab() {
       </Button>
 
       {workouts.length === 0 ? (
-        <Card className="border-0 shadow-sm rounded-2xl">
-          <CardContent className="p-8 text-center">
+        <div className="glass-card rounded-2xl">
+          <div className="p-8 text-center">
             <p className="text-muted-foreground">Нет тренировок</p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       ) : (
         <div className="space-y-2">
           {workouts.map((w) => (
-            <Card key={w.id} className="border-0 shadow-sm rounded-2xl">
-              <CardContent className="p-4 flex items-start justify-between">
+            <div key={w.id} className="glass-card rounded-2xl">
+              <div className="p-4 flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <span className="font-medium text-sm">{w.title}</span>
@@ -123,33 +123,33 @@ export default function WorkoutsTab() {
                   </p>
                   {w.notes && <p className="text-xs text-muted-foreground mt-0.5">{w.notes}</p>}
                 </div>
-                <button onClick={() => deleteWorkout(w.id)} className="p-1.5 rounded-lg hover:bg-muted transition shrink-0">
+                <button onClick={() => deleteWorkout(w.id)} className="p-1.5 rounded-lg hover:bg-white/[0.06] transition shrink-0">
                   <Trash2 className="w-4 h-4 text-muted-foreground" />
                 </button>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           ))}
         </div>
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="rounded-2xl">
+        <DialogContent className="rounded-2xl glass-strong border-white/[0.1]">
           <DialogHeader>
             <DialogTitle>Добавить тренировку</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
               <Label>Дата</Label>
-              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="rounded-xl" />
+              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="space-y-2">
               <Label>Название</Label>
-              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Тренировка ног" className="rounded-xl" />
+              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Тренировка ног" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="space-y-2">
               <Label>Тип</Label>
               <Select value={workoutType} onValueChange={(v) => { if (v) setWorkoutType(v) }}>
-                <SelectTrigger className="rounded-xl"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="rounded-xl bg-white/[0.06] border-white/[0.1]"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {Object.entries(WORKOUT_TYPES).map(([k, v]) => (
                     <SelectItem key={k} value={k}>{v}</SelectItem>
@@ -159,11 +159,11 @@ export default function WorkoutsTab() {
             </div>
             <div className="space-y-2">
               <Label>Длительность (мин)</Label>
-              <Input type="number" value={duration} onChange={(e) => setDuration(e.target.value)} placeholder="60" className="rounded-xl" />
+              <Input type="number" value={duration} onChange={(e) => setDuration(e.target.value)} placeholder="60" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="space-y-2">
               <Label>Заметка</Label>
-              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-xl" />
+              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
             </div>
             <Button onClick={handleAdd} className="w-full rounded-xl">Добавить</Button>
           </div>

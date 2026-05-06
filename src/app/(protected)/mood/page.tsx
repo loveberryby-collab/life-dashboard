@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -148,19 +147,18 @@ export default function MoodPage() {
       <h1 className="text-2xl font-bold mb-6">Настроение</h1>
 
       {/* Date picker */}
-      <div className="flex items-center justify-between bg-card rounded-2xl shadow-sm px-4 py-3 mb-4">
-        <button onClick={() => shiftDate(-1)} className="p-2 rounded-full hover:bg-muted transition">
+      <div className="flex items-center justify-between glass rounded-2xl px-4 py-3 mb-4">
+        <button onClick={() => shiftDate(-1)} className="p-2 rounded-full hover:bg-white/[0.06] transition">
           <ChevronLeft className="w-5 h-5 text-primary" />
         </button>
         <span className="text-sm font-semibold">{formatDateRu(date)}</span>
-        <button onClick={() => shiftDate(1)} className="p-2 rounded-full hover:bg-muted transition">
+        <button onClick={() => shiftDate(1)} className="p-2 rounded-full hover:bg-white/[0.06] transition">
           <ChevronRight className="w-5 h-5 text-primary" />
         </button>
       </div>
 
       {/* Score inputs */}
-      <Card className="border-0 shadow-sm rounded-2xl mb-4">
-        <CardContent className="p-6 space-y-6">
+      <div className="glass-card rounded-2xl p-6 space-y-6 mb-4">
           <ScoreSlider label="Настроение" value={mood} onChange={setMood} emoji="😊" />
           <ScoreSlider label="Энергия" value={energy} onChange={setEnergy} emoji="⚡" />
           <ScoreSlider label="Тревожность" value={anxiety} onChange={setAnxiety} emoji="😰" />
@@ -171,7 +169,7 @@ export default function MoodPage() {
               value={note}
               onChange={(e) => setNote(e.target.value)}
               placeholder="Как прошёл день?"
-              className="rounded-xl"
+              className="rounded-xl bg-white/[0.06] border-white/[0.1]"
             />
           </div>
 
@@ -179,28 +177,25 @@ export default function MoodPage() {
             <Save className="w-4 h-4" />
             {existingId ? 'Обновить' : 'Сохранить'}
           </Button>
-        </CardContent>
-      </Card>
+      </div>
 
       {/* History */}
       {history.length > 0 && (
-        <Card className="border-0 shadow-sm rounded-2xl">
-          <CardContent className="p-4">
-            <h3 className="font-semibold text-sm mb-3">История</h3>
-            <div className="space-y-2">
-              {history.map((log) => (
-                <div key={log.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
-                  <span className="text-sm text-muted-foreground">{formatDateShort(log.date)}</span>
-                  <div className="flex gap-3 text-xs">
-                    <span>😊 {log.mood_score ?? '—'}</span>
-                    <span>⚡ {log.energy_score ?? '—'}</span>
-                    <span>😰 {log.anxiety_score ?? '—'}</span>
-                  </div>
+        <div className="glass-card rounded-2xl p-4">
+          <h3 className="font-semibold text-sm mb-3">История</h3>
+          <div className="space-y-2">
+            {history.map((log) => (
+              <div key={log.id} className="flex items-center justify-between py-2 border-b border-white/[0.08] last:border-0">
+                <span className="text-sm text-muted-foreground">{formatDateShort(log.date)}</span>
+                <div className="flex gap-3 text-xs">
+                  <span>😊 {log.mood_score ?? '—'}</span>
+                  <span>⚡ {log.energy_score ?? '—'}</span>
+                  <span>😰 {log.anxiety_score ?? '—'}</span>
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+              </div>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   )

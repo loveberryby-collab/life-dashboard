@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Card, CardContent } from '@/components/ui/card'
+
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -94,16 +94,16 @@ export default function MeasurementsTab() {
       </Button>
 
       {measurements.length === 0 ? (
-        <Card className="border-0 shadow-sm rounded-2xl">
-          <CardContent className="p-8 text-center">
+        <div className="glass-card rounded-2xl">
+          <div className="p-8 text-center">
             <p className="text-muted-foreground">Нет замеров</p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       ) : (
         <div className="space-y-3">
           {measurements.map((m) => (
-            <Card key={m.id} className="border-0 shadow-sm rounded-2xl">
-              <CardContent className="p-4">
+            <div key={m.id} className="glass-card rounded-2xl">
+              <div className="p-4">
                 <p className="text-sm font-semibold mb-2">{formatDateShort(m.date)}</p>
                 <div className="grid grid-cols-3 gap-2 text-sm">
                   {FIELDS.map(({ key, label }) => {
@@ -118,21 +118,21 @@ export default function MeasurementsTab() {
                   })}
                 </div>
                 {m.notes && <p className="text-xs text-muted-foreground mt-2">{m.notes}</p>}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           ))}
         </div>
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="rounded-2xl">
+        <DialogContent className="rounded-2xl glass-strong border-white/[0.1]">
           <DialogHeader>
             <DialogTitle>Добавить замеры</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
               <Label>Дата</Label>
-              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="rounded-xl" />
+              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="grid grid-cols-2 gap-3">
               {FIELDS.map(({ key, label }) => (
@@ -144,14 +144,14 @@ export default function MeasurementsTab() {
                     value={values[key] ?? ''}
                     onChange={(e) => setValues({ ...values, [key]: e.target.value })}
                     placeholder="0"
-                    className="rounded-xl"
+                    className="rounded-xl bg-white/[0.06] border-white/[0.1]"
                   />
                 </div>
               ))}
             </div>
             <div className="space-y-2">
               <Label>Заметка</Label>
-              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-xl" />
+              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
             </div>
             <Button onClick={handleAdd} className="w-full rounded-xl">Сохранить</Button>
           </div>
