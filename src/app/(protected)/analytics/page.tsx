@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Loader2, ListChecks, Target, Weight, Smile, TrendingUp, TrendingDown, Flame } from 'lucide-react'
+import { Loader2, ListChecks, Target, Weight, Smile, TrendingUp, TrendingDown } from 'lucide-react'
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import { Button } from '@/components/ui/button'
 
@@ -62,7 +62,7 @@ export default function AnalyticsPage() {
   const [tasks, setTasks] = useState<DayTaskRow[]>([])
   const [habits, setHabits] = useState<HabitRow[]>([])
   const [habitLogs, setHabitLogs] = useState<HabitLogRow[]>([])
-  const [streakLogs, setStreakLogs] = useState<HabitLogRow[]>([])
+
   const [weights, setWeights] = useState<WeightRow[]>([])
   const [moods, setMoods] = useState<MoodRow[]>([])
 
@@ -74,12 +74,10 @@ export default function AnalyticsPage() {
   useEffect(() => {
     async function fetchAll() {
       setLoading(true)
-      const streakStart = getDaysRange(365)[0]
-      const [tasksRes, habitsRes, habitLogsRes, streakLogsRes, weightsRes, moodsRes] = await Promise.all([
+      const [tasksRes, habitsRes, habitLogsRes, weightsRes, moodsRes] = await Promise.all([
         supabase.from('day_tasks').select('date, is_completed').gte('date', startDate),
         supabase.from('habits').select('id, title').eq('is_active', true),
         supabase.from('habit_logs').select('habit_id, date, is_completed').gte('date', startDate),
-        supabase.from('habit_logs').select('habit_id, date, is_completed').gte('date', streakStart).eq('is_completed', true),
         supabase.from('weight_logs').select('date, weight').gte('date', startDate).order('date', { ascending: true }),
         supabase.from('mood_logs').select('date, mood_score, energy_score, anxiety_score').gte('date', startDate).order('date'),
       ])
@@ -87,7 +85,6 @@ export default function AnalyticsPage() {
       setTasks(tasksRes.data ?? [])
       setHabits(habitsRes.data ?? [])
       setHabitLogs(habitLogsRes.data ?? [])
-      setStreakLogs(streakLogsRes.data ?? [])
       setWeights(weightsRes.data ?? [])
       setMoods(moodsRes.data ?? [])
       setLoading(false)
@@ -139,31 +136,6 @@ export default function AnalyticsPage() {
       pct: possibleTotal > 0 ? Math.round((dayLogs.length / possibleTotal) * 100) : 0,
     }
   })
-
-  const habitStreaks: { title: string; streak: number }[] = habits.map((h) => {
-    const logsForHabit = streakLogs
-      .filter((l) => l.habit_id === h.id)
-      .map((l) => l.date)
-      .sort()
-      .reverse()
-
-    let streak = 0
-    let checkDate = days[days.length - 1]
-    for (let i = 0; i < 365; i++) {
-      if (logsForHabit.includes(checkDate)) {
-        streak++
-        const d = new Date(checkDate + 'T00:00:00')
-        d.setDate(d.getDate() - 1)
-        const year = d.getFullYear()
-        const month = String(d.getMonth() + 1).padStart(2, '0')
-        const dy = String(d.getDate()).padStart(2, '0')
-        checkDate = `${year}-${month}-${dy}`
-      } else {
-        break
-      }
-    }
-    return { title: h.title, streak }
-  }).sort((a, b) => b.streak - a.streak)
 
   // --- WEIGHT ---
   const weightChartData = weights.map((w) => ({
@@ -277,24 +249,6 @@ export default function AnalyticsPage() {
           </ResponsiveContainer>
         </div>
 
-        {habitStreaks.length > 0 && (
-          <div className="glass-card rounded-md p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <Flame className="w-4 h-4 text-sky-400" />
-              <p className="text-sm text-muted-foreground">Серии (streak)</p>
-            </div>
-            <div className="space-y-2">
-              {habitStreaks.map((h) => (
-                <div key={h.title} className="flex items-center justify-between">
-                  <span className="text-sm">{h.title}</span>
-                  <span className={`text-sm font-bold ${h.streak > 0 ? 'text-sky-400' : 'text-muted-foreground'}`}>
-                    {h.streak > 0 ? `${h.streak} дн.` : '—'}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </section>
 
       {/* ========= WEIGHT ========= */}
