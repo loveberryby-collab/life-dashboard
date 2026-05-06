@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Sparkles, Loader2 } from 'lucide-react'
+import { Snowflake, Loader2 } from 'lucide-react'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -36,12 +36,12 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="w-full max-w-md glass-card rounded-2xl p-8 glow-purple">
+      <div className="w-full max-w-md glass-card rounded-md p-8 glow-blue">
         <div className="text-center space-y-2 mb-6">
-          <div className="mx-auto w-14 h-14 rounded-2xl flex items-center justify-center gradient-purple glow-purple">
-            <Sparkles className="w-7 h-7 text-violet-200" />
+          <div className="mx-auto w-14 h-14 rounded-md flex items-center justify-center gradient-blue glow-blue">
+            <Snowflake className="w-7 h-7 text-sky-200" />
           </div>
-          <h1 className="text-2xl font-bold text-foreground mt-4">Life Dashboard</h1>
+          <h1 className="text-2xl font-bold text-foreground mt-4">Olka White Life</h1>
           <p className="text-muted-foreground text-sm">Войдите в свой аккаунт</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -54,7 +54,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="rounded-xl bg-white/[0.06] border-white/[0.1] focus:border-primary/50 placeholder:text-muted-foreground/50"
+              className="rounded-md bg-white/[0.06] border-white/[0.1] focus:border-primary/50 placeholder:text-muted-foreground/50"
             />
           </div>
           <div className="space-y-2">
@@ -66,11 +66,11 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="rounded-xl bg-white/[0.06] border-white/[0.1] focus:border-primary/50 placeholder:text-muted-foreground/50"
+              className="rounded-md bg-white/[0.06] border-white/[0.1] focus:border-primary/50 placeholder:text-muted-foreground/50"
             />
           </div>
           {error && <p className="text-sm text-destructive">{error}</p>}
-          <Button type="submit" className="w-full rounded-xl bg-primary hover:bg-primary/90 shadow-[0_0_15px_rgba(124,91,245,0.3)]" disabled={loading}>
+          <Button type="submit" className="w-full rounded-md bg-primary hover:bg-primary/90 shadow-[0_0_15px_rgba(123,189,232,0.2)]" disabled={loading}>
             {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
             Войти
           </Button>

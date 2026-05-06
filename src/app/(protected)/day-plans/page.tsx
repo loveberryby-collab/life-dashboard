@@ -136,13 +136,13 @@ export default function DayPlansPage() {
     <div className="p-4 md:p-8 max-w-3xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Планы на день</h1>
-        <Button onClick={openCreate} className="rounded-xl gap-1">
+        <Button onClick={openCreate} className="rounded-md gap-1">
           <Plus className="w-4 h-4" /> Добавить
         </Button>
       </div>
 
       {/* Date picker */}
-      <div className="flex items-center justify-between glass rounded-2xl px-4 py-3 mb-4">
+      <div className="flex items-center justify-between glass rounded-md px-4 py-3 mb-4">
         <button onClick={() => shiftDate(-1)} className="p-2 rounded-full hover:bg-white/[0.06] transition">
           <ChevronLeft className="w-5 h-5 text-primary" />
         </button>
@@ -160,7 +160,7 @@ export default function DayPlansPage() {
             variant={filter === f ? 'default' : 'outline'}
             size="sm"
             onClick={() => setFilter(f)}
-            className="rounded-xl"
+            className="rounded-md"
           >
             {f === 'all' ? 'Все' : f === 'active' ? 'Активные' : 'Выполненные'}
           </Button>
@@ -172,7 +172,7 @@ export default function DayPlansPage() {
           <Loader2 className="w-6 h-6 animate-spin text-primary" />
         </div>
       ) : filtered.length === 0 ? (
-        <div className="glass-card rounded-2xl p-8 text-center">
+        <div className="glass-card rounded-md p-8 text-center">
           <p className="text-muted-foreground">
             {filter === 'all' ? 'Нет задач на этот день' : filter === 'active' ? 'Нет активных задач' : 'Нет выполненных задач'}
           </p>
@@ -180,7 +180,7 @@ export default function DayPlansPage() {
       ) : (
         <div className="space-y-2">
           {filtered.map((task) => (
-            <div key={task.id} className="glass-card rounded-2xl p-4 flex items-start gap-3">
+            <div key={task.id} className="glass-card rounded-md p-4 flex items-start gap-3">
                 <button
                   onClick={() => toggleComplete(task)}
                   className={`mt-0.5 w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition ${
@@ -221,23 +221,23 @@ export default function DayPlansPage() {
 
       {/* Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="rounded-2xl glass-strong border-white/[0.1]">
+        <DialogContent className="rounded-md glass-strong border-white/[0.1]">
           <DialogHeader>
             <DialogTitle>{editingTask ? 'Редактировать задачу' : 'Новая задача'}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
               <Label>Название</Label>
-              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Что нужно сделать?" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
+              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Что нужно сделать?" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="space-y-2">
               <Label>Описание</Label>
-              <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Подробности (необязательно)" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
+              <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Подробности (необязательно)" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="space-y-2">
               <Label>Приоритет</Label>
               <Select value={priority} onValueChange={(v) => { if (v) setPriority(v as 'low' | 'medium' | 'high') }}>
-                <SelectTrigger className="rounded-xl bg-white/[0.06] border-white/[0.1]">
+                <SelectTrigger className="rounded-md bg-white/[0.06] border-white/[0.1]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -247,7 +247,7 @@ export default function DayPlansPage() {
                 </SelectContent>
               </Select>
             </div>
-            <Button onClick={handleSave} className="w-full rounded-xl">
+            <Button onClick={handleSave} className="w-full rounded-md">
               {editingTask ? 'Сохранить' : 'Добавить'}
             </Button>
           </div>

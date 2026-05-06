@@ -122,7 +122,7 @@ export default function NutritionTab() {
   return (
     <div>
       {/* Summary */}
-      <div className="glass-card rounded-2xl mb-4">
+      <div className="glass-card rounded-md mb-4">
         <div className="p-4 space-y-3">
           <h3 className="font-semibold text-sm">Итого за день</h3>
           {[
@@ -144,12 +144,12 @@ export default function NutritionTab() {
         </div>
       </div>
 
-      <Button onClick={openAdd} className="w-full rounded-xl gap-1 mb-4">
+      <Button onClick={openAdd} className="w-full rounded-md gap-1 mb-4">
         <Plus className="w-4 h-4" /> Добавить приём пищи
       </Button>
 
       {meals.length === 0 ? (
-        <div className="glass-card rounded-2xl">
+        <div className="glass-card rounded-md">
           <div className="p-8 text-center">
             <p className="text-muted-foreground">Нет записей о питании за сегодня</p>
           </div>
@@ -157,7 +157,7 @@ export default function NutritionTab() {
       ) : (
         <div className="space-y-2">
           {meals.map((meal) => (
-            <div key={meal.id} className="glass-card rounded-2xl">
+            <div key={meal.id} className="glass-card rounded-md">
               <div className="p-4 flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-2">
@@ -181,7 +181,7 @@ export default function NutritionTab() {
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="rounded-2xl glass-strong border-white/[0.1]">
+        <DialogContent className="rounded-md glass-strong border-white/[0.1]">
           <DialogHeader>
             <DialogTitle>Добавить приём пищи</DialogTitle>
           </DialogHeader>
@@ -189,7 +189,7 @@ export default function NutritionTab() {
             <div className="space-y-2">
               <Label>Тип</Label>
               <Select value={mealType} onValueChange={(v) => { if (v) setMealType(v) }}>
-                <SelectTrigger className="rounded-xl bg-white/[0.06] border-white/[0.1]"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="rounded-md bg-white/[0.06] border-white/[0.1]"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {Object.entries(MEAL_TYPES).map(([k, v]) => (
                     <SelectItem key={k} value={k}>{v}</SelectItem>
@@ -199,31 +199,31 @@ export default function NutritionTab() {
             </div>
             <div className="space-y-2">
               <Label>Название</Label>
-              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Овсянка с бананом" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
+              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Овсянка с бананом" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
                 <Label className="text-xs">Калории</Label>
-                <Input type="number" value={calories} onChange={(e) => setCalories(e.target.value)} placeholder="0" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
+                <Input type="number" value={calories} onChange={(e) => setCalories(e.target.value)} placeholder="0" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
               </div>
               <div className="space-y-1">
                 <Label className="text-xs">Белки (г)</Label>
-                <Input type="number" value={protein} onChange={(e) => setProtein(e.target.value)} placeholder="0" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
+                <Input type="number" value={protein} onChange={(e) => setProtein(e.target.value)} placeholder="0" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
               </div>
               <div className="space-y-1">
                 <Label className="text-xs">Жиры (г)</Label>
-                <Input type="number" value={fat} onChange={(e) => setFat(e.target.value)} placeholder="0" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
+                <Input type="number" value={fat} onChange={(e) => setFat(e.target.value)} placeholder="0" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
               </div>
               <div className="space-y-1">
                 <Label className="text-xs">Углеводы (г)</Label>
-                <Input type="number" value={carbs} onChange={(e) => setCarbs(e.target.value)} placeholder="0" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
+                <Input type="number" value={carbs} onChange={(e) => setCarbs(e.target.value)} placeholder="0" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
               </div>
             </div>
             <div className="space-y-2">
               <Label>Заметка</Label>
-              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
+              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
             </div>
-            <Button onClick={handleAdd} className="w-full rounded-xl">Добавить</Button>
+            <Button onClick={handleAdd} className="w-full rounded-md">Добавить</Button>
           </div>
         </DialogContent>
       </Dialog>

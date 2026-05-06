@@ -89,12 +89,12 @@ export default function MeasurementsTab() {
 
   return (
     <div>
-      <Button onClick={() => setDialogOpen(true)} className="w-full rounded-xl gap-1 mb-4">
+      <Button onClick={() => setDialogOpen(true)} className="w-full rounded-md gap-1 mb-4">
         <Plus className="w-4 h-4" /> Добавить замеры
       </Button>
 
       {measurements.length === 0 ? (
-        <div className="glass-card rounded-2xl">
+        <div className="glass-card rounded-md">
           <div className="p-8 text-center">
             <p className="text-muted-foreground">Нет замеров</p>
           </div>
@@ -102,7 +102,7 @@ export default function MeasurementsTab() {
       ) : (
         <div className="space-y-3">
           {measurements.map((m) => (
-            <div key={m.id} className="glass-card rounded-2xl">
+            <div key={m.id} className="glass-card rounded-md">
               <div className="p-4">
                 <p className="text-sm font-semibold mb-2">{formatDateShort(m.date)}</p>
                 <div className="grid grid-cols-3 gap-2 text-sm">
@@ -125,14 +125,14 @@ export default function MeasurementsTab() {
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="rounded-2xl glass-strong border-white/[0.1]">
+        <DialogContent className="rounded-md glass-strong border-white/[0.1]">
           <DialogHeader>
             <DialogTitle>Добавить замеры</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
               <Label>Дата</Label>
-              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
+              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="rounded-md bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="grid grid-cols-2 gap-3">
               {FIELDS.map(({ key, label }) => (
@@ -144,16 +144,16 @@ export default function MeasurementsTab() {
                     value={values[key] ?? ''}
                     onChange={(e) => setValues({ ...values, [key]: e.target.value })}
                     placeholder="0"
-                    className="rounded-xl bg-white/[0.06] border-white/[0.1]"
+                    className="rounded-md bg-white/[0.06] border-white/[0.1]"
                   />
                 </div>
               ))}
             </div>
             <div className="space-y-2">
               <Label>Заметка</Label>
-              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
+              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
             </div>
-            <Button onClick={handleAdd} className="w-full rounded-xl">Сохранить</Button>
+            <Button onClick={handleAdd} className="w-full rounded-md">Сохранить</Button>
           </div>
         </DialogContent>
       </Dialog>

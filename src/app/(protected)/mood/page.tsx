@@ -147,7 +147,7 @@ export default function MoodPage() {
       <h1 className="text-2xl font-bold mb-6">Настроение</h1>
 
       {/* Date picker */}
-      <div className="flex items-center justify-between glass rounded-2xl px-4 py-3 mb-4">
+      <div className="flex items-center justify-between glass rounded-md px-4 py-3 mb-4">
         <button onClick={() => shiftDate(-1)} className="p-2 rounded-full hover:bg-white/[0.06] transition">
           <ChevronLeft className="w-5 h-5 text-primary" />
         </button>
@@ -158,7 +158,7 @@ export default function MoodPage() {
       </div>
 
       {/* Score inputs */}
-      <div className="glass-card rounded-2xl p-6 space-y-6 mb-4">
+      <div className="glass-card rounded-md p-6 space-y-6 mb-4">
           <ScoreSlider label="Настроение" value={mood} onChange={setMood} emoji="😊" />
           <ScoreSlider label="Энергия" value={energy} onChange={setEnergy} emoji="⚡" />
           <ScoreSlider label="Тревожность" value={anxiety} onChange={setAnxiety} emoji="😰" />
@@ -169,11 +169,11 @@ export default function MoodPage() {
               value={note}
               onChange={(e) => setNote(e.target.value)}
               placeholder="Как прошёл день?"
-              className="rounded-xl bg-white/[0.06] border-white/[0.1]"
+              className="rounded-md bg-white/[0.06] border-white/[0.1]"
             />
           </div>
 
-          <Button onClick={handleSave} className="w-full rounded-xl gap-1">
+          <Button onClick={handleSave} className="w-full rounded-md gap-1">
             <Save className="w-4 h-4" />
             {existingId ? 'Обновить' : 'Сохранить'}
           </Button>
@@ -181,7 +181,7 @@ export default function MoodPage() {
 
       {/* History */}
       {history.length > 0 && (
-        <div className="glass-card rounded-2xl p-4">
+        <div className="glass-card rounded-md p-4">
           <h3 className="font-semibold text-sm mb-3">История</h3>
           <div className="space-y-2">
             {history.map((log) => (

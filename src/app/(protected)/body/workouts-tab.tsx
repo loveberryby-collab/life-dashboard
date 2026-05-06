@@ -95,12 +95,12 @@ export default function WorkoutsTab() {
 
   return (
     <div>
-      <Button onClick={() => setDialogOpen(true)} className="w-full rounded-xl gap-1 mb-4">
+      <Button onClick={() => setDialogOpen(true)} className="w-full rounded-md gap-1 mb-4">
         <Plus className="w-4 h-4" /> Добавить тренировку
       </Button>
 
       {workouts.length === 0 ? (
-        <div className="glass-card rounded-2xl">
+        <div className="glass-card rounded-md">
           <div className="p-8 text-center">
             <p className="text-muted-foreground">Нет тренировок</p>
           </div>
@@ -108,7 +108,7 @@ export default function WorkoutsTab() {
       ) : (
         <div className="space-y-2">
           {workouts.map((w) => (
-            <div key={w.id} className="glass-card rounded-2xl">
+            <div key={w.id} className="glass-card rounded-md">
               <div className="p-4 flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
@@ -133,23 +133,23 @@ export default function WorkoutsTab() {
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="rounded-2xl glass-strong border-white/[0.1]">
+        <DialogContent className="rounded-md glass-strong border-white/[0.1]">
           <DialogHeader>
             <DialogTitle>Добавить тренировку</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
               <Label>Дата</Label>
-              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
+              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="rounded-md bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="space-y-2">
               <Label>Название</Label>
-              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Тренировка ног" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
+              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Тренировка ног" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="space-y-2">
               <Label>Тип</Label>
               <Select value={workoutType} onValueChange={(v) => { if (v) setWorkoutType(v) }}>
-                <SelectTrigger className="rounded-xl bg-white/[0.06] border-white/[0.1]"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="rounded-md bg-white/[0.06] border-white/[0.1]"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {Object.entries(WORKOUT_TYPES).map(([k, v]) => (
                     <SelectItem key={k} value={k}>{v}</SelectItem>
@@ -159,13 +159,13 @@ export default function WorkoutsTab() {
             </div>
             <div className="space-y-2">
               <Label>Длительность (мин)</Label>
-              <Input type="number" value={duration} onChange={(e) => setDuration(e.target.value)} placeholder="60" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
+              <Input type="number" value={duration} onChange={(e) => setDuration(e.target.value)} placeholder="60" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="space-y-2">
               <Label>Заметка</Label>
-              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
+              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
             </div>
-            <Button onClick={handleAdd} className="w-full rounded-xl">Добавить</Button>
+            <Button onClick={handleAdd} className="w-full rounded-md">Добавить</Button>
           </div>
         </DialogContent>
       </Dialog>

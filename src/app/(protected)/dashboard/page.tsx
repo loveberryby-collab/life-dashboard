@@ -66,9 +66,9 @@ export default function DashboardPage() {
       title: 'Планы на день',
       icon: ListChecks,
       href: '/day-plans',
-      gradient: 'gradient-purple',
-      glow: 'glow-purple',
-      iconColor: 'text-violet-300',
+      gradient: 'gradient-blue',
+      glow: 'glow-blue',
+      iconColor: 'text-blue-300',
       stat: stats ? `${stats.tasksCompleted} / ${stats.tasksTotal} выполнено` : '—',
     },
     {
@@ -77,16 +77,16 @@ export default function DashboardPage() {
       href: '/habits',
       gradient: 'gradient-teal',
       glow: 'glow-teal',
-      iconColor: 'text-teal-300',
+      iconColor: 'text-sky-300',
       stat: stats ? `${stats.habitsCompleted} / ${stats.habitsTotal} отмечено` : '—',
     },
     {
       title: 'Красивое тело',
       icon: Dumbbell,
       href: '/body',
-      gradient: 'gradient-purple-teal',
-      glow: 'glow-purple',
-      iconColor: 'text-pink-300',
+      gradient: 'gradient-blue-teal',
+      glow: 'glow-blue',
+      iconColor: 'text-blue-200',
       stat: stats
         ? `${stats.calories} ккал${stats.lastWeight ? ` · ${stats.lastWeight} кг` : ''}`
         : '—',
@@ -95,9 +95,9 @@ export default function DashboardPage() {
       title: 'Настроение',
       icon: Smile,
       href: '/mood',
-      gradient: 'gradient-purple',
+      gradient: 'gradient-blue',
       glow: 'glow-teal',
-      iconColor: 'text-cyan-300',
+      iconColor: 'text-sky-300',
       stat: stats?.moodScore ? `${stats.moodScore} / 10` : 'Не заполнено',
     },
   ]
@@ -115,10 +115,10 @@ export default function DashboardPage() {
         {cards.map((card) => (
           <div
             key={card.href}
-            className={`glass-card rounded-2xl p-6 cursor-pointer hover:scale-[1.02] transition-all duration-300 ${card.glow}`}
+            className={`glass-card rounded-md p-6 cursor-pointer hover:scale-[1.02] transition-all duration-300 ${card.glow}`}
             onClick={() => router.push(card.href)}
           >
-            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${card.gradient} mb-4`}>
+            <div className={`w-12 h-12 rounded-md flex items-center justify-center ${card.gradient} mb-4`}>
               <card.icon className={`w-6 h-6 ${card.iconColor}`} />
             </div>
             <h3 className="font-semibold text-foreground text-lg">{card.title}</h3>

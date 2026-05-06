@@ -76,7 +76,7 @@ export default function WeightTab() {
   return (
     <div>
       {/* Last weight */}
-      <div className="glass-card rounded-2xl mb-4">
+      <div className="glass-card rounded-md mb-4">
         <div className="p-6 text-center">
           {latest ? (
             <>
@@ -100,13 +100,13 @@ export default function WeightTab() {
         </div>
       </div>
 
-      <Button onClick={() => setDialogOpen(true)} className="w-full rounded-xl gap-1 mb-4">
+      <Button onClick={() => setDialogOpen(true)} className="w-full rounded-md gap-1 mb-4">
         <Plus className="w-4 h-4" /> Записать вес
       </Button>
 
       {/* History */}
       {logs.length > 0 && (
-        <div className="glass-card rounded-2xl">
+        <div className="glass-card rounded-md">
           <div className="p-4">
             <h3 className="font-semibold text-sm mb-3">История</h3>
             <div className="space-y-2">
@@ -122,24 +122,24 @@ export default function WeightTab() {
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="rounded-2xl glass-strong border-white/[0.1]">
+        <DialogContent className="rounded-md glass-strong border-white/[0.1]">
           <DialogHeader>
             <DialogTitle>Записать вес</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
               <Label>Дата</Label>
-              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
+              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="rounded-md bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="space-y-2">
               <Label>Вес (кг)</Label>
-              <Input type="number" step="0.1" value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="65.0" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
+              <Input type="number" step="0.1" value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="65.0" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="space-y-2">
               <Label>Заметка</Label>
-              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
+              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
             </div>
-            <Button onClick={handleAdd} className="w-full rounded-xl">Записать</Button>
+            <Button onClick={handleAdd} className="w-full rounded-md">Записать</Button>
           </div>
         </DialogContent>
       </Dialog>

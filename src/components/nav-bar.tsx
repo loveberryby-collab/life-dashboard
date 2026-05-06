@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { LayoutDashboard, ListChecks, Target, Dumbbell, Smile, BarChart3, LogOut } from 'lucide-react'
+import { LayoutDashboard, ListChecks, Target, Dumbbell, Smile, BarChart3, LogOut, Snowflake } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const links = [
@@ -31,10 +31,10 @@ export default function NavBar() {
       {/* Desktop sidebar */}
       <aside className="hidden md:flex fixed left-0 top-0 h-full w-56 glass border-r border-white/[0.08] flex-col p-4 z-40">
         <div className="flex items-center gap-2 mb-8 px-2">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center gradient-purple glow-purple">
-            <span className="text-white text-sm font-bold">L</span>
+          <div className="w-8 h-8 rounded-md flex items-center justify-center gradient-blue glow-blue">
+            <Snowflake className="w-5 h-5 text-sky-200" />
           </div>
-          <span className="font-bold text-foreground">Life Dashboard</span>
+          <span className="font-bold text-foreground text-sm">Olka White Life</span>
         </div>
         <nav className="flex-1 space-y-1">
           {links.map(({ href, label, icon: Icon }) => (
@@ -42,9 +42,9 @@ export default function NavBar() {
               key={href}
               href={href}
               className={cn(
-                'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
+                'flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-all duration-200',
                 pathname === href
-                  ? 'bg-primary/20 text-primary shadow-[0_0_12px_rgba(124,91,245,0.15)]'
+                  ? 'bg-primary/20 text-primary shadow-[0_0_12px_rgba(123,189,232,0.15)]'
                   : 'text-muted-foreground hover:bg-white/[0.06] hover:text-foreground'
               )}
             >
@@ -55,7 +55,7 @@ export default function NavBar() {
         </nav>
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:bg-white/[0.06] hover:text-foreground transition-all duration-200"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-muted-foreground hover:bg-white/[0.06] hover:text-foreground transition-all duration-200"
         >
           <LogOut className="w-5 h-5" />
           Выйти
@@ -71,7 +71,7 @@ export default function NavBar() {
               href={href}
               className={cn(
                 'flex flex-col items-center gap-0.5 px-2 py-1 text-xs font-medium transition-all duration-200',
-                pathname === href ? 'text-primary drop-shadow-[0_0_6px_rgba(124,91,245,0.4)]' : 'text-muted-foreground'
+                pathname === href ? 'text-primary drop-shadow-[0_0_6px_rgba(123,189,232,0.3)]' : 'text-muted-foreground'
               )}
             >
               <Icon className="w-5 h-5" />

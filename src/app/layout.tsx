@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Life Dashboard",
+  title: "Olka White Life",
   description: "Личный кабинет для отслеживания планов, привычек, тела и настроения",
 };
 

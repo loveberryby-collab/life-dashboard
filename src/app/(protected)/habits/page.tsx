@@ -26,7 +26,7 @@ interface HabitLog {
   is_completed: boolean
 }
 
-const HABIT_COLORS = ['#7c5bf5', '#38bdb9', '#f472b6', '#a78bfa', '#5eead4', '#fbbf24']
+const HABIT_COLORS = ['#7BBDE8', '#4E8EA2', '#6EA2B3', '#0A4174', '#49769F', '#BDD8E9']
 
 export default function HabitsPage() {
   const [habits, setHabits] = useState<Habit[]>([])
@@ -130,7 +130,7 @@ export default function HabitsPage() {
     <div className="p-4 md:p-8 max-w-3xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Трекер привычек</h1>
-        <Button onClick={openCreate} className="rounded-xl gap-1">
+        <Button onClick={openCreate} className="rounded-md gap-1">
           <Plus className="w-4 h-4" /> Добавить
         </Button>
       </div>
@@ -138,7 +138,7 @@ export default function HabitsPage() {
       <p className="text-sm text-muted-foreground mb-2">{formatDateRu(today)}</p>
 
       {/* Progress */}
-      <div className="glass-card rounded-2xl p-4 mb-4">
+      <div className="glass-card rounded-md p-4 mb-4">
         <div className="flex justify-between text-sm mb-2">
           <span className="text-muted-foreground">Прогресс за сегодня</span>
           <span className="font-semibold">{completed} / {total}</span>
@@ -147,7 +147,7 @@ export default function HabitsPage() {
       </div>
 
       {habits.length === 0 ? (
-        <div className="glass-card rounded-2xl p-8 text-center">
+        <div className="glass-card rounded-md p-8 text-center">
           <p className="text-muted-foreground">Добавьте свою первую привычку</p>
         </div>
       ) : (
@@ -155,18 +155,18 @@ export default function HabitsPage() {
           {habits.map((habit) => {
             const isCompleted = logs.some((l) => l.habit_id === habit.id)
             return (
-              <div key={habit.id} className="glass-card rounded-2xl p-4 flex items-center gap-3">
+              <div key={habit.id} className="glass-card rounded-md p-4 flex items-center gap-3">
                   <button
                     onClick={() => toggleHabit(habit.id)}
-                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition"
+                    className="w-10 h-10 rounded-md flex items-center justify-center shrink-0 transition"
                     style={{
-                      backgroundColor: isCompleted ? (habit.color ?? '#7c5bf5') : `${habit.color ?? '#7c5bf5'}20`,
+                      backgroundColor: isCompleted ? (habit.color ?? '#7BBDE8') : `${habit.color ?? '#7BBDE8'}20`,
                     }}
                   >
                     {isCompleted ? (
                       <Check className="w-5 h-5 text-white" />
                     ) : (
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: habit.color ?? '#7c5bf5' }} />
+                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: habit.color ?? '#7BBDE8' }} />
                     )}
                   </button>
                   <div className="flex-1 min-w-0">
@@ -192,18 +192,18 @@ export default function HabitsPage() {
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="rounded-2xl glass-strong border-white/[0.1]">
+        <DialogContent className="rounded-md glass-strong border-white/[0.1]">
           <DialogHeader>
             <DialogTitle>{editingHabit ? 'Редактировать привычку' : 'Новая привычка'}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
               <Label>Название</Label>
-              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Например: Медитация" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
+              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Например: Медитация" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="space-y-2">
               <Label>Описание</Label>
-              <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Необязательно" className="rounded-xl bg-white/[0.06] border-white/[0.1]" />
+              <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Необязательно" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="space-y-2">
               <Label>Цвет</Label>
@@ -218,7 +218,7 @@ export default function HabitsPage() {
                 ))}
               </div>
             </div>
-            <Button onClick={handleSave} className="w-full rounded-xl">
+            <Button onClick={handleSave} className="w-full rounded-md">
               {editingHabit ? 'Сохранить' : 'Добавить'}
             </Button>
           </div>
