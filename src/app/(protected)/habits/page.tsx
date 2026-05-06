@@ -26,7 +26,7 @@ interface HabitLog {
   is_completed: boolean
 }
 
-const HABIT_COLORS = ['#7BBDE8', '#4E8EA2', '#6EA2B3', '#0A4174', '#49769F', '#BDD8E9']
+const HABIT_COLORS = ['#58C9F3', '#2FA0C6', '#BDE5FF', '#1C4E75', '#7DD8F8', '#3BB5D9']
 
 export default function HabitsPage() {
   const [habits, setHabits] = useState<Habit[]>([])
@@ -160,13 +160,13 @@ export default function HabitsPage() {
                     onClick={() => toggleHabit(habit.id)}
                     className="w-10 h-10 rounded-md flex items-center justify-center shrink-0 transition"
                     style={{
-                      backgroundColor: isCompleted ? (habit.color ?? '#7BBDE8') : `${habit.color ?? '#7BBDE8'}20`,
+                      backgroundColor: isCompleted ? (habit.color ?? '#58C9F3') : `${habit.color ?? '#58C9F3'}20`,
                     }}
                   >
                     {isCompleted ? (
                       <Check className="w-5 h-5 text-white" />
                     ) : (
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: habit.color ?? '#7BBDE8' }} />
+                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: habit.color ?? '#58C9F3' }} />
                     )}
                   </button>
                   <div className="flex-1 min-w-0">

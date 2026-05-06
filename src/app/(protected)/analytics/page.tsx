@@ -46,10 +46,10 @@ function shortDate(dateStr: string): string {
 
 const chartTooltipStyle = {
   contentStyle: {
-    background: 'rgba(0, 29, 57, 0.95)',
-    border: '1px solid rgba(123,189,232,0.15)',
+    background: 'rgba(6, 24, 38, 0.95)',
+    border: '1px solid rgba(88,201,243,0.12)',
     borderRadius: '6px',
-    color: '#BDD8E9',
+    color: '#BDE5FF',
     fontSize: '12px',
   },
 }
@@ -239,11 +239,11 @@ export default function AnalyticsPage() {
           <ResponsiveContainer width="100%" height={180}>
             <BarChart data={tasksChartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-              <XAxis dataKey="date" tick={{ fill: '#6EA2B3', fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#6EA2B3', fontSize: 11 }} axisLine={false} tickLine={false} allowDecimals={false} />
+              <XAxis dataKey="date" tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} allowDecimals={false} />
               <Tooltip {...chartTooltipStyle} />
-              <Bar dataKey="total" name="Всего" fill="rgba(10,65,116,0.5)" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="done" name="Выполнено" fill="#7BBDE8" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="total" name="Всего" fill="rgba(28,78,117,0.3)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="done" name="Выполнено" fill="#58C9F3" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -263,16 +263,16 @@ export default function AnalyticsPage() {
           <ResponsiveContainer width="100%" height={180}>
             <AreaChart data={habitCompletionByDay}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-              <XAxis dataKey="date" tick={{ fill: '#6EA2B3', fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#6EA2B3', fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, 100]} />
+              <XAxis dataKey="date" tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, 100]} />
               <Tooltip {...chartTooltipStyle} />
               <defs>
                 <linearGradient id="tealGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#4E8EA2" stopOpacity={0.4} />
-                  <stop offset="100%" stopColor="#4E8EA2" stopOpacity={0.05} />
+                  <stop offset="0%" stopColor="#2FA0C6" stopOpacity={0.4} />
+                  <stop offset="100%" stopColor="#2FA0C6" stopOpacity={0.05} />
                 </linearGradient>
               </defs>
-              <Area type="monotone" dataKey="pct" name="%" stroke="#4E8EA2" fill="url(#tealGrad)" strokeWidth={2} />
+              <Area type="monotone" dataKey="pct" name="%" stroke="#2FA0C6" fill="url(#tealGrad)" strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -330,10 +330,10 @@ export default function AnalyticsPage() {
           <ResponsiveContainer width="100%" height={180}>
             <BarChart data={caloriesChartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-              <XAxis dataKey="date" tick={{ fill: '#6EA2B3', fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#6EA2B3', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <XAxis dataKey="date" tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} />
               <Tooltip {...chartTooltipStyle} />
-              <Bar dataKey="calories" name="Калории" fill="#6EA2B3" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="calories" name="Калории" fill="#2FA0C6" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -362,16 +362,16 @@ export default function AnalyticsPage() {
             <ResponsiveContainer width="100%" height={180}>
               <AreaChart data={weightChartData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                <XAxis dataKey="date" tick={{ fill: '#6EA2B3', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: '#6EA2B3', fontSize: 11 }} axisLine={false} tickLine={false} domain={['dataMin - 1', 'dataMax + 1']} />
+                <XAxis dataKey="date" tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} domain={['dataMin - 1', 'dataMax + 1']} />
                 <Tooltip {...chartTooltipStyle} />
                 <defs>
                   <linearGradient id="weightGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#7BBDE8" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="#7BBDE8" stopOpacity={0.05} />
+                    <stop offset="0%" stopColor="#58C9F3" stopOpacity={0.4} />
+                    <stop offset="100%" stopColor="#58C9F3" stopOpacity={0.05} />
                   </linearGradient>
                 </defs>
-                <Area type="monotone" dataKey="weight" name="Вес (кг)" stroke="#7BBDE8" fill="url(#weightGrad)" strokeWidth={2} />
+                <Area type="monotone" dataKey="weight" name="Вес (кг)" stroke="#58C9F3" fill="url(#weightGrad)" strokeWidth={2} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -431,26 +431,26 @@ export default function AnalyticsPage() {
           <ResponsiveContainer width="100%" height={200}>
             <AreaChart data={moodChartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-              <XAxis dataKey="date" tick={{ fill: '#6EA2B3', fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#6EA2B3', fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, 10]} />
+              <XAxis dataKey="date" tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, 10]} />
               <Tooltip {...chartTooltipStyle} />
               <defs>
                 <linearGradient id="moodGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#0A4174" stopOpacity={0.3} />
-                  <stop offset="100%" stopColor="#0A4174" stopOpacity={0.05} />
+                  <stop offset="0%" stopColor="#1C4E75" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="#1C4E75" stopOpacity={0.05} />
                 </linearGradient>
                 <linearGradient id="energyGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#4E8EA2" stopOpacity={0.3} />
-                  <stop offset="100%" stopColor="#4E8EA2" stopOpacity={0.05} />
+                  <stop offset="0%" stopColor="#2FA0C6" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="#2FA0C6" stopOpacity={0.05} />
                 </linearGradient>
                 <linearGradient id="anxietyGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#49769F" stopOpacity={0.3} />
-                  <stop offset="100%" stopColor="#49769F" stopOpacity={0.05} />
+                  <stop offset="0%" stopColor="#2FA0C6" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="#2FA0C6" stopOpacity={0.05} />
                 </linearGradient>
               </defs>
-              <Area type="monotone" dataKey="mood" name="Настроение" stroke="#0A4174" fill="url(#moodGrad)" strokeWidth={2} connectNulls />
-              <Area type="monotone" dataKey="energy" name="Энергия" stroke="#4E8EA2" fill="url(#energyGrad)" strokeWidth={2} connectNulls />
-              <Area type="monotone" dataKey="anxiety" name="Тревожность" stroke="#49769F" fill="url(#anxietyGrad)" strokeWidth={2} connectNulls />
+              <Area type="monotone" dataKey="mood" name="Настроение" stroke="#1C4E75" fill="url(#moodGrad)" strokeWidth={2} connectNulls />
+              <Area type="monotone" dataKey="energy" name="Энергия" stroke="#2FA0C6" fill="url(#energyGrad)" strokeWidth={2} connectNulls />
+              <Area type="monotone" dataKey="anxiety" name="Тревожность" stroke="#2FA0C6" fill="url(#anxietyGrad)" strokeWidth={2} connectNulls />
             </AreaChart>
           </ResponsiveContainer>
         </div>

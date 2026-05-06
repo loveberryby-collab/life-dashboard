@@ -44,7 +44,7 @@ export default function NavBar() {
               className={cn(
                 'flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-all duration-200',
                 pathname === href
-                  ? 'bg-primary/20 text-primary shadow-[0_0_12px_rgba(123,189,232,0.15)]'
+                  ? 'bg-primary/20 text-primary shadow-[0_0_12px_rgba(88,201,243,0.12)]'
                   : 'text-muted-foreground hover:bg-white/[0.06] hover:text-foreground'
               )}
             >
@@ -71,7 +71,7 @@ export default function NavBar() {
               href={href}
               className={cn(
                 'flex flex-col items-center gap-0.5 px-2 py-1 text-xs font-medium transition-all duration-200',
-                pathname === href ? 'text-primary drop-shadow-[0_0_6px_rgba(123,189,232,0.3)]' : 'text-muted-foreground'
+                pathname === href ? 'text-primary drop-shadow-[0_0_6px_rgba(88,201,243,0.2)]' : 'text-muted-foreground'
               )}
             >
               <Icon className="w-5 h-5" />

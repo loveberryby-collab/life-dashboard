@@ -94,7 +94,7 @@ export default function RegisterPage() {
             />
           </div>
           {error && <p className="text-sm text-destructive">{error}</p>}
-          <Button type="submit" className="w-full rounded-md bg-primary hover:bg-primary/90 shadow-[0_0_15px_rgba(123,189,232,0.2)]" disabled={loading}>
+          <Button type="submit" className="w-full rounded-md bg-primary hover:bg-primary/90 shadow-[0_0_15px_rgba(88,201,243,0.15)]" disabled={loading}>
             {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
             Создать аккаунт
           </Button>
