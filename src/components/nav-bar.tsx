@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { LayoutDashboard, ListChecks, Target, Dumbbell, Smile, LogOut } from 'lucide-react'
+import { LayoutDashboard, ListChecks, Target, Dumbbell, Smile, BarChart3, LogOut } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const links = [
@@ -12,6 +12,7 @@ const links = [
   { href: '/habits', label: 'Привычки', icon: Target },
   { href: '/body', label: 'Тело', icon: Dumbbell },
   { href: '/mood', label: 'Настроение', icon: Smile },
+  { href: '/analytics', label: 'Аналитика', icon: BarChart3 },
 ]
 
 export default function NavBar() {
