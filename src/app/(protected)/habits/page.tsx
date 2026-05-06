@@ -26,6 +26,22 @@ interface HabitLog {
   is_completed: boolean
 }
 
+interface CalendarLog {
+  habit_id: string
+  date: string
+  is_completed: boolean
+}
+
+function getLast28Days(): string[] {
+  const days: string[] = []
+  for (let i = 27; i >= 0; i--) {
+    const d = new Date()
+    d.setDate(d.getDate() - i)
+    days.push(d.toISOString().split('T')[0])
+  }
+  return days
+}
+
 const HABIT_COLORS = ['#58C9F3', '#2FA0C6', '#BDE5FF', '#1C4E75', '#7DD8F8', '#3BB5D9']
 
 export default function HabitsPage() {
@@ -38,20 +54,24 @@ export default function HabitsPage() {
   const [description, setDescription] = useState('')
   const [color, setColor] = useState(HABIT_COLORS[0])
   const [reloadKey, setReloadKey] = useState(0)
+  const [calendarLogs, setCalendarLogs] = useState<CalendarLog[]>([])
   const supabase = createClient()
   const today = getToday()
+  const last28 = getLast28Days()
 
   useEffect(() => {
     let cancelled = false
     async function fetchData() {
       setLoading(true)
-      const [habitsRes, logsRes] = await Promise.all([
+      const [habitsRes, logsRes, calRes] = await Promise.all([
         supabase.from('habits').select('*').eq('is_active', true).order('created_at'),
         supabase.from('habit_logs').select('habit_id, is_completed').eq('date', today),
+        supabase.from('habit_logs').select('habit_id, date, is_completed').gte('date', last28[0]).lte('date', last28[last28.length - 1]),
       ])
       if (!cancelled) {
         setHabits(habitsRes.data ?? [])
         setLogs(logsRes.data ?? [])
+        setCalendarLogs(calRes.data ?? [])
         setLoading(false)
       }
     }
@@ -188,6 +208,41 @@ export default function HabitsPage() {
               </div>
             )
           })}
+        </div>
+      )}
+
+      {/* Habits calendar */}
+      {habits.length > 0 && (
+        <div className="glass-card rounded-md p-4 mt-4">
+          <p className="text-sm text-muted-foreground mb-3">Календарь привычек (28 дней)</p>
+          <div className="space-y-3">
+            {habits.map((habit) => (
+              <div key={habit.id}>
+                <p className="text-xs font-medium mb-1 truncate" style={{ color: habit.color ?? '#58C9F3' }}>{habit.title}</p>
+                <div className="grid grid-cols-7 gap-1">
+                  {last28.map((day) => {
+                    const done = calendarLogs.some((l) => l.habit_id === habit.id && l.date === day && l.is_completed)
+                    const isToday = day === today
+                    return (
+                      <div
+                        key={day}
+                        title={day}
+                        className={`h-5 rounded-sm transition ${isToday ? 'ring-1 ring-primary/50' : ''}`}
+                        style={{
+                          backgroundColor: done ? (habit.color ?? '#58C9F3') : 'rgba(28,78,117,0.2)',
+                          opacity: done ? 1 : 0.4,
+                        }}
+                      />
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-between mt-2">
+            <span className="text-[10px] text-muted-foreground">{last28[0].slice(5)}</span>
+            <span className="text-[10px] text-muted-foreground">сегодня</span>
+          </div>
         </div>
       )}
 

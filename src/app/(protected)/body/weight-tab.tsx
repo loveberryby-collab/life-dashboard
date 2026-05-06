@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Plus, Loader2, TrendingDown, TrendingUp, Minus } from 'lucide-react'
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import { toast } from 'sonner'
 import { getToday, formatDateShort } from '@/lib/utils/date'
 
@@ -103,6 +104,28 @@ export default function WeightTab() {
       <Button onClick={() => setDialogOpen(true)} className="w-full rounded-md gap-1 mb-4">
         <Plus className="w-4 h-4" /> Записать вес
       </Button>
+
+      {/* Weight chart */}
+      {logs.length > 1 && (
+        <div className="glass-card rounded-md p-4 mb-4">
+          <p className="text-sm text-muted-foreground mb-3">Динамика веса</p>
+          <ResponsiveContainer width="100%" height={200}>
+            <AreaChart data={[...logs].reverse().map((l) => ({ date: formatDateShort(l.date), weight: Number(l.weight) }))}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(88,201,243,0.08)" />
+              <XAxis dataKey="date" tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} domain={['dataMin - 1', 'dataMax + 1']} />
+              <Tooltip contentStyle={{ background: 'rgba(6,24,38,0.95)', border: '1px solid rgba(88,201,243,0.12)', borderRadius: '6px', color: '#BDE5FF', fontSize: '12px' }} />
+              <defs>
+                <linearGradient id="weightGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#58C9F3" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="#58C9F3" stopOpacity={0.05} />
+                </linearGradient>
+              </defs>
+              <Area type="monotone" dataKey="weight" name="Вес (кг)" stroke="#58C9F3" fill="url(#weightGrad)" strokeWidth={2} />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      )}
 
       {/* History */}
       {logs.length > 0 && (

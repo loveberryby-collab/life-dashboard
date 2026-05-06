@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { ChevronLeft, ChevronRight, Loader2, Save } from 'lucide-react'
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import { toast } from 'sonner'
 import { getToday, formatDateRu, formatDateShort } from '@/lib/utils/date'
 
@@ -178,6 +179,38 @@ export default function MoodPage() {
             {existingId ? 'Обновить' : 'Сохранить'}
           </Button>
       </div>
+
+      {/* Mood chart */}
+      {history.length > 1 && (
+        <div className="glass-card rounded-md p-4 mb-4">
+          <p className="text-sm text-muted-foreground mb-3">Тренды настроения</p>
+          <ResponsiveContainer width="100%" height={200}>
+            <AreaChart data={[...history].reverse().map((h) => ({ date: formatDateShort(h.date), mood: h.mood_score, energy: h.energy_score, anxiety: h.anxiety_score }))}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(88,201,243,0.08)" />
+              <XAxis dataKey="date" tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, 10]} />
+              <Tooltip contentStyle={{ background: 'rgba(6,24,38,0.95)', border: '1px solid rgba(88,201,243,0.12)', borderRadius: '6px', color: '#BDE5FF', fontSize: '12px' }} />
+              <defs>
+                <linearGradient id="moodG" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#58C9F3" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="#58C9F3" stopOpacity={0.05} />
+                </linearGradient>
+                <linearGradient id="energyG" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#2FA0C6" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="#2FA0C6" stopOpacity={0.05} />
+                </linearGradient>
+                <linearGradient id="anxietyG" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#BDE5FF" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="#BDE5FF" stopOpacity={0.05} />
+                </linearGradient>
+              </defs>
+              <Area type="monotone" dataKey="mood" name="Настроение" stroke="#58C9F3" fill="url(#moodG)" strokeWidth={2} connectNulls />
+              <Area type="monotone" dataKey="energy" name="Энергия" stroke="#2FA0C6" fill="url(#energyG)" strokeWidth={2} connectNulls />
+              <Area type="monotone" dataKey="anxiety" name="Тревожность" stroke="#BDE5FF" fill="url(#anxietyG)" strokeWidth={2} connectNulls />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      )}
 
       {/* History */}
       {history.length > 0 && (

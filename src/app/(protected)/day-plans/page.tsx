@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Plus, Trash2, Pencil, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'
+import { Plus, Trash2, Pencil, ChevronLeft, ChevronRight, Loader2, Goal, X } from 'lucide-react'
 import { toast } from 'sonner'
 import { getToday, formatDateRu } from '@/lib/utils/date'
 
@@ -31,6 +31,23 @@ const priorityColors = {
 
 const priorityLabels = { low: 'Низкий', medium: 'Средний', high: 'Высокий' }
 
+interface MonthlyGoal {
+  id: string
+  text: string
+  done: boolean
+}
+
+function getMonthKey(): string {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+}
+
+function getMonthLabel(): string {
+  const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+  const d = new Date()
+  return `${months[d.getMonth()]} ${d.getFullYear()}`
+}
+
 export default function DayPlansPage() {
   const [date, setDate] = useState(getToday())
   const [tasks, setTasks] = useState<Task[]>([])
@@ -42,7 +59,34 @@ export default function DayPlansPage() {
   const [description, setDescription] = useState('')
   const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('medium')
   const [reloadKey, setReloadKey] = useState(0)
+  const [newGoal, setNewGoal] = useState('')
   const supabase = createClient()
+  const monthKey = getMonthKey()
+
+  const [goals, setGoals] = useState<MonthlyGoal[]>(() => {
+    if (typeof window === 'undefined') return []
+    const saved = localStorage.getItem(`goals-${monthKey}`)
+    return saved ? JSON.parse(saved) : []
+  })
+
+  function saveGoals(updated: MonthlyGoal[]) {
+    setGoals(updated)
+    localStorage.setItem(`goals-${monthKey}`, JSON.stringify(updated))
+  }
+
+  function addGoal() {
+    if (!newGoal.trim()) return
+    saveGoals([...goals, { id: Date.now().toString(), text: newGoal.trim(), done: false }])
+    setNewGoal('')
+  }
+
+  function toggleGoal(id: string) {
+    saveGoals(goals.map((g) => g.id === id ? { ...g, done: !g.done } : g))
+  }
+
+  function removeGoal(id: string) {
+    saveGoals(goals.filter((g) => g.id !== id))
+  }
 
   useEffect(() => {
     let cancelled = false
@@ -218,6 +262,57 @@ export default function DayPlansPage() {
           ))}
         </div>
       )}
+
+      {/* Monthly goals */}
+      <div className="glass-card rounded-md p-4 mt-6">
+        <div className="flex items-center gap-2 mb-3">
+          <Goal className="w-5 h-5 text-primary" />
+          <h2 className="font-semibold text-sm">Цели на месяц — {getMonthLabel()}</h2>
+        </div>
+        <div className="flex gap-2 mb-3">
+          <Input
+            value={newGoal}
+            onChange={(e) => setNewGoal(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && addGoal()}
+            placeholder="Новая цель..."
+            className="rounded-md bg-white/[0.06] border-white/[0.1] flex-1"
+          />
+          <Button onClick={addGoal} size="sm" className="rounded-md">
+            <Plus className="w-4 h-4" />
+          </Button>
+        </div>
+        {goals.length === 0 ? (
+          <p className="text-sm text-muted-foreground text-center py-2">Добавьте цели на этот месяц</p>
+        ) : (
+          <div className="space-y-1">
+            {goals.map((g) => (
+              <div key={g.id} className="flex items-center gap-2 py-1.5">
+                <button
+                  onClick={() => toggleGoal(g.id)}
+                  className={`w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition ${
+                    g.done ? 'bg-primary border-primary' : 'border-border hover:border-primary'
+                  }`}
+                >
+                  {g.done && (
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M2 6L5 9L10 3" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                </button>
+                <span className={`flex-1 text-sm ${g.done ? 'line-through text-muted-foreground' : ''}`}>{g.text}</span>
+                <button onClick={() => removeGoal(g.id)} className="p-1 rounded-lg hover:bg-white/[0.06] transition">
+                  <X className="w-3 h-3 text-muted-foreground" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+        {goals.length > 0 && (
+          <p className="text-xs text-muted-foreground mt-2">
+            {goals.filter((g) => g.done).length} / {goals.length} выполнено
+          </p>
+        )}
+      </div>
 
       {/* Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
