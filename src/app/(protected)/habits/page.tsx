@@ -37,7 +37,10 @@ function getLast28Days(): string[] {
   for (let i = 27; i >= 0; i--) {
     const d = new Date()
     d.setDate(d.getDate() - i)
-    days.push(d.toISOString().split('T')[0])
+    const year = d.getFullYear()
+    const month = String(d.getMonth() + 1).padStart(2, '0')
+    const day = String(d.getDate()).padStart(2, '0')
+    days.push(`${year}-${month}-${day}`)
   }
   return days
 }
@@ -134,9 +137,10 @@ export default function HabitsPage() {
     setReloadKey((k) => k + 1)
   }
 
-  const completed = logs.filter((l) => l.is_completed !== false).length
+  const activeHabitIds = new Set(habits.map((h) => h.id))
+  const completed = logs.filter((l) => l.is_completed !== false && activeHabitIds.has(l.habit_id)).length
   const total = habits.length
-  const progressPct = total > 0 ? (completed / total) * 100 : 0
+  const progressPct = total > 0 ? Math.min((completed / total) * 100, 100) : 0
 
   if (loading) {
     return (

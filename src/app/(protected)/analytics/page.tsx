@@ -62,6 +62,7 @@ export default function AnalyticsPage() {
   const [tasks, setTasks] = useState<DayTaskRow[]>([])
   const [habits, setHabits] = useState<HabitRow[]>([])
   const [habitLogs, setHabitLogs] = useState<HabitLogRow[]>([])
+  const [streakLogs, setStreakLogs] = useState<HabitLogRow[]>([])
   const [weights, setWeights] = useState<WeightRow[]>([])
   const [moods, setMoods] = useState<MoodRow[]>([])
 
@@ -73,10 +74,12 @@ export default function AnalyticsPage() {
   useEffect(() => {
     async function fetchAll() {
       setLoading(true)
-      const [tasksRes, habitsRes, habitLogsRes, weightsRes, moodsRes] = await Promise.all([
+      const streakStart = getDaysRange(365)[0]
+      const [tasksRes, habitsRes, habitLogsRes, streakLogsRes, weightsRes, moodsRes] = await Promise.all([
         supabase.from('day_tasks').select('date, is_completed').gte('date', startDate),
         supabase.from('habits').select('id, title').eq('is_active', true),
         supabase.from('habit_logs').select('habit_id, date, is_completed').gte('date', startDate),
+        supabase.from('habit_logs').select('habit_id, date, is_completed').gte('date', streakStart).eq('is_completed', true),
         supabase.from('weight_logs').select('date, weight').gte('date', startDate).order('date', { ascending: true }),
         supabase.from('mood_logs').select('date, mood_score, energy_score, anxiety_score').gte('date', startDate).order('date'),
       ])
@@ -84,6 +87,7 @@ export default function AnalyticsPage() {
       setTasks(tasksRes.data ?? [])
       setHabits(habitsRes.data ?? [])
       setHabitLogs(habitLogsRes.data ?? [])
+      setStreakLogs(streakLogsRes.data ?? [])
       setWeights(weightsRes.data ?? [])
       setMoods(moodsRes.data ?? [])
       setLoading(false)
@@ -137,8 +141,8 @@ export default function AnalyticsPage() {
   })
 
   const habitStreaks: { title: string; streak: number }[] = habits.map((h) => {
-    const logsForHabit = habitLogs
-      .filter((l) => l.habit_id === h.id && l.is_completed)
+    const logsForHabit = streakLogs
+      .filter((l) => l.habit_id === h.id)
       .map((l) => l.date)
       .sort()
       .reverse()
@@ -180,8 +184,10 @@ export default function AnalyticsPage() {
 
   const moodEntries = moods.filter((m) => m.mood_score !== null)
   const avgMood = moodEntries.length > 0 ? (moodEntries.reduce((s, m) => s + (m.mood_score ?? 0), 0) / moodEntries.length).toFixed(1) : '—'
-  const avgEnergy = moodEntries.length > 0 ? (moodEntries.reduce((s, m) => s + (m.energy_score ?? 0), 0) / moodEntries.length).toFixed(1) : '—'
-  const avgAnxiety = moodEntries.length > 0 ? (moodEntries.reduce((s, m) => s + (m.anxiety_score ?? 0), 0) / moodEntries.length).toFixed(1) : '—'
+  const energyEntries = moods.filter((m) => m.energy_score !== null)
+  const anxietyEntries = moods.filter((m) => m.anxiety_score !== null)
+  const avgEnergy = energyEntries.length > 0 ? (energyEntries.reduce((s, m) => s + (m.energy_score ?? 0), 0) / energyEntries.length).toFixed(1) : '—'
+  const avgAnxiety = anxietyEntries.length > 0 ? (anxietyEntries.reduce((s, m) => s + (m.anxiety_score ?? 0), 0) / anxietyEntries.length).toFixed(1) : '—'
 
   return (
     <div className="p-4 md:p-8 max-w-4xl mx-auto space-y-6">

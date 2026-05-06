@@ -33,7 +33,7 @@ export default function DashboardPage() {
       const [tasksRes, habitsRes, habitLogsRes, mealsRes, weightRes, moodRes] = await Promise.all([
         supabase.from('day_tasks').select('id, is_completed').eq('date', today),
         supabase.from('habits').select('id').eq('is_active', true),
-        supabase.from('habit_logs').select('id').eq('date', today).eq('is_completed', true),
+        supabase.from('habit_logs').select('id, habit_id').eq('date', today).eq('is_completed', true),
         supabase.from('meals').select('calories').eq('date', today),
         supabase.from('weight_logs').select('weight').order('date', { ascending: false }).limit(1),
         supabase.from('mood_logs').select('mood_score').eq('date', today).limit(1),
@@ -42,7 +42,10 @@ export default function DashboardPage() {
       setStats({
         tasksCompleted: tasksRes.data?.filter((t) => t.is_completed).length ?? 0,
         tasksTotal: tasksRes.data?.length ?? 0,
-        habitsCompleted: habitLogsRes.data?.length ?? 0,
+        habitsCompleted: (() => {
+          const activeIds = new Set(habitsRes.data?.map((h) => h.id) ?? [])
+          return habitLogsRes.data?.filter((l) => activeIds.has(l.habit_id)).length ?? 0
+        })(),
         habitsTotal: habitsRes.data?.length ?? 0,
         calories: mealsRes.data?.reduce((sum, m) => sum + Number(m.calories), 0) ?? 0,
         lastWeight: weightRes.data?.[0]?.weight ?? null,
