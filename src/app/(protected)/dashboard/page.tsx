@@ -27,7 +27,7 @@ export default function DashboardPage() {
   useEffect(() => {
     async function load() {
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
+      if (!user) { router.push('/login'); return }
       setUserName(user.email?.split('@')[0] || 'друг')
 
       const [tasksRes, habitsRes, habitLogsRes, mealsRes, weightRes, moodRes] = await Promise.all([

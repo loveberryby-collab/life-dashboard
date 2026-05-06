@@ -133,17 +133,46 @@ export default function MeasurementsTab() {
       belly: values.belly ? Number(values.belly) : null,
       thigh: values.thigh ? Number(values.thigh) : null,
       arm: values.arm ? Number(values.arm) : null,
-      calf: values.calf ? Number(values.calf) : null,
       notes: notes || null,
     }
 
+    if (values.calf) {
+      payload.calf = Number(values.calf)
+    }
+
     if (editingMeasurement) {
-      await supabase.from('body_measurements').update(payload).eq('id', editingMeasurement.id)
+      const { error } = await supabase.from('body_measurements').update(payload).eq('id', editingMeasurement.id)
+      if (error) {
+        if (error.message.includes('calf')) {
+          delete payload.calf
+          const { error: retryError } = await supabase.from('body_measurements').update(payload).eq('id', editingMeasurement.id)
+          if (retryError) {
+            toast.error('Ошибка сохранения: ' + retryError.message)
+            return
+          }
+        } else {
+          toast.error('Ошибка сохранения: ' + error.message)
+          return
+        }
+      }
       toast.success('Замеры обновлены')
     } else {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
-      await supabase.from('body_measurements').insert({ ...payload, user_id: user.id })
+      const { error } = await supabase.from('body_measurements').insert({ ...payload, user_id: user.id })
+      if (error) {
+        if (error.message.includes('calf')) {
+          delete payload.calf
+          const { error: retryError } = await supabase.from('body_measurements').insert({ ...payload, user_id: user.id })
+          if (retryError) {
+            toast.error('Ошибка сохранения: ' + retryError.message)
+            return
+          }
+        } else {
+          toast.error('Ошибка сохранения: ' + error.message)
+          return
+        }
+      }
       toast.success('Замеры сохранены')
     }
     setDialogOpen(false)
@@ -166,7 +195,7 @@ export default function MeasurementsTab() {
     return row
   })
 
-  const hasChartData = chartData.length > 1
+  const hasChartData = chartData.length >= 1
 
   if (loading) {
     return <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
