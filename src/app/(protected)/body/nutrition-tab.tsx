@@ -172,7 +172,7 @@ export default function NutritionTab() {
                   {Math.round(item.current)}{item.unit} / {item.goal}{item.unit}
                 </span>
               </div>
-              <Progress value={Math.min((item.current / item.goal) * 100, 100)} className="h-2" />
+              <Progress value={item.goal > 0 ? Math.min((item.current / item.goal) * 100, 100) : 0} className="h-2" />
             </div>
           ))}
         </div>
