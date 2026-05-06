@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Plus, Loader2, TrendingDown, TrendingUp, Minus } from 'lucide-react'
+import { Plus, Loader2, TrendingDown, TrendingUp, Minus, Pencil, Trash2 } from 'lucide-react'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import { toast } from 'sonner'
 import { getToday, formatDateShort } from '@/lib/utils/date'
@@ -24,6 +24,7 @@ export default function WeightTab() {
   const [logs, setLogs] = useState<WeightLog[]>([])
   const [loading, setLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [editingLog, setEditingLog] = useState<WeightLog | null>(null)
   const [weight, setWeight] = useState('')
   const [date, setDate] = useState(getToday())
   const [notes, setNotes] = useState('')
@@ -48,21 +49,49 @@ export default function WeightTab() {
     return () => { cancelled = true }
   }, [reloadKey]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  async function handleAdd() {
-    if (!weight) return
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
-
-    await supabase.from('weight_logs').insert({
-      user_id: user.id,
-      date,
-      weight: Number(weight),
-      notes: notes || null,
-    })
-    toast.success('Вес записан')
-    setDialogOpen(false)
+  function openCreate() {
+    setEditingLog(null)
     setWeight('')
+    setDate(getToday())
     setNotes('')
+    setDialogOpen(true)
+  }
+
+  function openEdit(log: WeightLog) {
+    setEditingLog(log)
+    setWeight(String(Number(log.weight)))
+    setDate(log.date)
+    setNotes(log.notes ?? '')
+    setDialogOpen(true)
+  }
+
+  async function handleSave() {
+    if (!weight) return
+
+    if (editingLog) {
+      await supabase
+        .from('weight_logs')
+        .update({ date, weight: Number(weight), notes: notes || null })
+        .eq('id', editingLog.id)
+      toast.success('Запись обновлена')
+    } else {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+      await supabase.from('weight_logs').insert({
+        user_id: user.id,
+        date,
+        weight: Number(weight),
+        notes: notes || null,
+      })
+      toast.success('Вес записан')
+    }
+    setDialogOpen(false)
+    setReloadKey((k) => k + 1)
+  }
+
+  async function handleDelete(id: string) {
+    await supabase.from('weight_logs').delete().eq('id', id)
+    toast.success('Запись удалена')
     setReloadKey((k) => k + 1)
   }
 
@@ -101,7 +130,7 @@ export default function WeightTab() {
         </div>
       </div>
 
-      <Button onClick={() => setDialogOpen(true)} className="w-full rounded-md gap-1 mb-4">
+      <Button onClick={openCreate} className="w-full rounded-md gap-1 mb-4">
         <Plus className="w-4 h-4" /> Записать вес
       </Button>
 
@@ -135,8 +164,19 @@ export default function WeightTab() {
             <div className="space-y-2">
               {logs.map((log) => (
                 <div key={log.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
-                  <span className="text-sm text-muted-foreground">{formatDateShort(log.date)}</span>
-                  <span className="font-medium">{Number(log.weight)} кг</span>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-sm text-muted-foreground">{formatDateShort(log.date)}</span>
+                    <span className="font-medium ml-3">{Number(log.weight)} кг</span>
+                    {log.notes && <span className="text-xs text-muted-foreground ml-2 truncate">· {log.notes}</span>}
+                  </div>
+                  <div className="flex gap-1 shrink-0 ml-2">
+                    <button onClick={() => openEdit(log)} className="p-1.5 rounded-lg hover:bg-white/[0.06] transition">
+                      <Pencil className="w-3.5 h-3.5 text-muted-foreground" />
+                    </button>
+                    <button onClick={() => handleDelete(log.id)} className="p-1.5 rounded-lg hover:bg-white/[0.06] transition">
+                      <Trash2 className="w-3.5 h-3.5 text-muted-foreground" />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -147,7 +187,7 @@ export default function WeightTab() {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="rounded-md glass-strong border-white/[0.1]">
           <DialogHeader>
-            <DialogTitle>Записать вес</DialogTitle>
+            <DialogTitle>{editingLog ? 'Редактировать запись' : 'Записать вес'}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
@@ -162,7 +202,9 @@ export default function WeightTab() {
               <Label>Заметка</Label>
               <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
             </div>
-            <Button onClick={handleAdd} className="w-full rounded-md">Записать</Button>
+            <Button onClick={handleSave} className="w-full rounded-md">
+              {editingLog ? 'Сохранить' : 'Записать'}
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
