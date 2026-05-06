@@ -99,7 +99,10 @@ export default function MoodPage() {
   function shiftDate(days: number) {
     const d = new Date(date + 'T00:00:00')
     d.setDate(d.getDate() + days)
-    setDate(d.toISOString().slice(0, 10))
+    const year = d.getFullYear()
+    const month = String(d.getMonth() + 1).padStart(2, '0')
+    const day = String(d.getDate()).padStart(2, '0')
+    setDate(`${year}-${month}-${day}`)
   }
 
   async function handleSave() {
