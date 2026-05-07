@@ -52,7 +52,7 @@ const FIELDS: { key: keyof Omit<Measurement, 'id' | 'date' | 'notes'>; label: st
   { key: 'calf', label: 'Голень' },
 ]
 
-const CHART_COLORS = ['#58C9F3', '#2FA0C6', '#BDE5FF', '#1C4E75', '#7DD8F8', '#3BB5D9', '#4DC8E0']
+const CHART_COLORS = ['#5BA3E6', '#3D7CC0', '#8EC5F0', '#1E3D6B', '#7DD8F8', '#3BB5D9', '#4DC8E0']
 
 function shortDate(dateStr: string): string {
   const d = new Date(dateStr + 'T00:00:00')
@@ -61,10 +61,10 @@ function shortDate(dateStr: string): string {
 
 const chartTooltipStyle = {
   contentStyle: {
-    background: 'rgba(6, 24, 38, 0.95)',
-    border: '1px solid rgba(88,201,243,0.12)',
+    background: 'rgba(10, 25, 48, 0.95)',
+    border: '1px solid rgba(90,140,200,0.12)',
     borderRadius: '6px',
-    color: '#BDE5FF',
+    color: '#8EC5F0',
     fontSize: '12px',
   },
 }
@@ -205,7 +205,7 @@ export default function MeasurementsTab() {
 
   return (
     <div>
-      <Button onClick={openCreate} className="w-full rounded-md gap-1 mb-4">
+      <Button onClick={openCreate} className="w-full rounded-2xl gap-1 mb-4">
         <Plus className="w-4 h-4" /> Добавить замеры
       </Button>
 
@@ -217,7 +217,7 @@ export default function MeasurementsTab() {
             variant={period === p ? 'default' : 'outline'}
             size="sm"
             onClick={() => setPeriod(p)}
-            className="rounded-md text-xs"
+            className="rounded-2xl text-xs"
           >
             {PERIOD_LABELS[p]}
           </Button>
@@ -231,13 +231,13 @@ export default function MeasurementsTab() {
             const hasData = chartData.some((d) => d[f.key] !== null)
             if (!hasData) return null
             return (
-              <div key={f.key} className="glass-card rounded-md p-4">
+              <div key={f.key} className="glass-card rounded-2xl p-4">
                 <p className="text-sm text-muted-foreground mb-3">{f.label}</p>
                 <ResponsiveContainer width="100%" height={150}>
                   <AreaChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(88,201,243,0.08)" />
-                    <XAxis dataKey="date" tick={{ fill: '#2FA0C6', fontSize: 10 }} axisLine={false} tickLine={false} />
-                    <YAxis tick={{ fill: '#2FA0C6', fontSize: 10 }} axisLine={false} tickLine={false} domain={['dataMin - 1', 'dataMax + 1']} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(90,140,200,0.08)" />
+                    <XAxis dataKey="date" tick={{ fill: '#3D7CC0', fontSize: 10 }} axisLine={false} tickLine={false} />
+                    <YAxis tick={{ fill: '#3D7CC0', fontSize: 10 }} axisLine={false} tickLine={false} domain={['dataMin - 1', 'dataMax + 1']} />
                     <Tooltip {...chartTooltipStyle} />
                     <defs>
                       <linearGradient id={`mGrad_${f.key}`} x1="0" y1="0" x2="0" y2="1">
@@ -256,7 +256,7 @@ export default function MeasurementsTab() {
 
       {/* History */}
       {displayMeasurements.length === 0 ? (
-        <div className="glass-card rounded-md">
+        <div className="glass-card rounded-2xl">
           <div className="p-8 text-center">
             <p className="text-muted-foreground">Нет замеров за выбранный период</p>
           </div>
@@ -264,7 +264,7 @@ export default function MeasurementsTab() {
       ) : (
         <div className="space-y-3">
           {displayMeasurements.map((m) => (
-            <div key={m.id} className="glass-card rounded-md">
+            <div key={m.id} className="glass-card rounded-2xl">
               <div className="p-4">
                 <div className="flex items-center justify-between mb-2">
                   <p className="text-sm font-semibold">{formatDateShort(m.date)}</p>
@@ -297,14 +297,14 @@ export default function MeasurementsTab() {
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="rounded-md glass-strong border-white/[0.1]">
+        <DialogContent className="rounded-2xl glass-strong border-white/[0.1]">
           <DialogHeader>
             <DialogTitle>{editingMeasurement ? 'Редактировать замеры' : 'Добавить замеры'}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
               <Label>Дата</Label>
-              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="rounded-md bg-white/[0.06] border-white/[0.1]" />
+              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="rounded-2xl bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="grid grid-cols-2 gap-3">
               {FIELDS.map(({ key, label }) => (
@@ -316,16 +316,16 @@ export default function MeasurementsTab() {
                     value={values[key] ?? ''}
                     onChange={(e) => setValues({ ...values, [key]: e.target.value })}
                     placeholder="0"
-                    className="rounded-md bg-white/[0.06] border-white/[0.1]"
+                    className="rounded-2xl bg-white/[0.06] border-white/[0.1]"
                   />
                 </div>
               ))}
             </div>
             <div className="space-y-2">
               <Label>Заметка</Label>
-              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
+              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-2xl bg-white/[0.06] border-white/[0.1]" />
             </div>
-            <Button onClick={handleSave} className="w-full rounded-md">
+            <Button onClick={handleSave} className="w-full rounded-2xl">
               {editingMeasurement ? 'Сохранить' : 'Добавить'}
             </Button>
           </div>

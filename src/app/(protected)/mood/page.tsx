@@ -73,10 +73,10 @@ function shortDate(dateStr: string): string {
 
 const chartTooltipStyle = {
   contentStyle: {
-    background: 'rgba(6, 24, 38, 0.95)',
-    border: '1px solid rgba(88,201,243,0.12)',
+    background: 'rgba(10, 25, 48, 0.95)',
+    border: '1px solid rgba(90,140,200,0.12)',
     borderRadius: '6px',
-    color: '#BDE5FF',
+    color: '#8EC5F0',
     fontSize: '12px',
   },
 }
@@ -211,7 +211,7 @@ export default function MoodPage() {
       <h1 className="text-2xl font-bold mb-6">Настроение</h1>
 
       {/* Date picker */}
-      <div className="flex items-center justify-between glass rounded-md px-4 py-3 mb-4">
+      <div className="flex items-center justify-between glass rounded-2xl px-4 py-3 mb-4">
         <button onClick={() => shiftDate(-1)} className="p-2 rounded-full hover:bg-white/[0.06] transition">
           <ChevronLeft className="w-5 h-5 text-primary" />
         </button>
@@ -222,7 +222,7 @@ export default function MoodPage() {
       </div>
 
       {/* Score inputs */}
-      <div className="glass-card rounded-md p-6 space-y-6 mb-4">
+      <div className="glass-card rounded-2xl p-6 space-y-6 mb-4">
           <ScoreSlider label="Настроение" value={mood} onChange={setMood} emoji="😊" />
           <ScoreSlider label="Энергия" value={energy} onChange={setEnergy} emoji="⚡" />
           <ScoreSlider label="Тревожность" value={anxiety} onChange={setAnxiety} emoji="😰" />
@@ -233,11 +233,11 @@ export default function MoodPage() {
               value={note}
               onChange={(e) => setNote(e.target.value)}
               placeholder="Как прошёл день?"
-              className="rounded-md bg-white/[0.06] border-white/[0.1]"
+              className="rounded-2xl bg-white/[0.06] border-white/[0.1]"
             />
           </div>
 
-          <Button onClick={handleSave} className="w-full rounded-md gap-1">
+          <Button onClick={handleSave} className="w-full rounded-2xl gap-1">
             <Save className="w-4 h-4" />
             {existingId ? 'Обновить' : 'Сохранить'}
           </Button>
@@ -251,7 +251,7 @@ export default function MoodPage() {
             variant={period === p ? 'default' : 'outline'}
             size="sm"
             onClick={() => setPeriod(p)}
-            className="rounded-md text-xs"
+            className="rounded-2xl text-xs"
           >
             {PERIOD_LABELS[p]}
           </Button>
@@ -260,15 +260,15 @@ export default function MoodPage() {
 
       {/* Average stats */}
       <div className="grid grid-cols-3 gap-3 mb-4">
-        <div className="glass-card rounded-md p-3 text-center">
+        <div className="glass-card rounded-2xl p-3 text-center">
           <p className="text-lg font-bold text-blue-300">{avgMood}</p>
           <p className="text-xs text-muted-foreground mt-1">Настроение</p>
         </div>
-        <div className="glass-card rounded-md p-3 text-center">
+        <div className="glass-card rounded-2xl p-3 text-center">
           <p className="text-lg font-bold text-teal-400">{avgEnergy}</p>
           <p className="text-xs text-muted-foreground mt-1">Энергия</p>
         </div>
-        <div className="glass-card rounded-md p-3 text-center">
+        <div className="glass-card rounded-2xl p-3 text-center">
           <p className="text-lg font-bold text-sky-400">{avgAnxiety}</p>
           <p className="text-xs text-muted-foreground mt-1">Тревожность</p>
         </div>
@@ -276,31 +276,31 @@ export default function MoodPage() {
 
       {/* Mood chart */}
       {chartData.length > 1 && (
-        <div className="glass-card rounded-md p-4 mb-4">
+        <div className="glass-card rounded-2xl p-4 mb-4">
           <p className="text-sm text-muted-foreground mb-3">Тренды настроения</p>
           <ResponsiveContainer width="100%" height={200}>
             <AreaChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(88,201,243,0.08)" />
-              <XAxis dataKey="date" tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, 10]} />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(90,140,200,0.08)" />
+              <XAxis dataKey="date" tick={{ fill: '#3D7CC0', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: '#3D7CC0', fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, 10]} />
               <Tooltip {...chartTooltipStyle} />
               <defs>
                 <linearGradient id="moodG" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#58C9F3" stopOpacity={0.3} />
-                  <stop offset="100%" stopColor="#58C9F3" stopOpacity={0.05} />
+                  <stop offset="0%" stopColor="#5BA3E6" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="#5BA3E6" stopOpacity={0.05} />
                 </linearGradient>
                 <linearGradient id="energyG" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#2FA0C6" stopOpacity={0.3} />
-                  <stop offset="100%" stopColor="#2FA0C6" stopOpacity={0.05} />
+                  <stop offset="0%" stopColor="#3D7CC0" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="#3D7CC0" stopOpacity={0.05} />
                 </linearGradient>
                 <linearGradient id="anxietyG" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#BDE5FF" stopOpacity={0.3} />
-                  <stop offset="100%" stopColor="#BDE5FF" stopOpacity={0.05} />
+                  <stop offset="0%" stopColor="#8EC5F0" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="#8EC5F0" stopOpacity={0.05} />
                 </linearGradient>
               </defs>
-              <Area type="monotone" dataKey="mood" name="Настроение" stroke="#58C9F3" fill="url(#moodG)" strokeWidth={2} connectNulls />
-              <Area type="monotone" dataKey="energy" name="Энергия" stroke="#2FA0C6" fill="url(#energyG)" strokeWidth={2} connectNulls />
-              <Area type="monotone" dataKey="anxiety" name="Тревожность" stroke="#BDE5FF" fill="url(#anxietyG)" strokeWidth={2} connectNulls />
+              <Area type="monotone" dataKey="mood" name="Настроение" stroke="#5BA3E6" fill="url(#moodG)" strokeWidth={2} connectNulls />
+              <Area type="monotone" dataKey="energy" name="Энергия" stroke="#3D7CC0" fill="url(#energyG)" strokeWidth={2} connectNulls />
+              <Area type="monotone" dataKey="anxiety" name="Тревожность" stroke="#8EC5F0" fill="url(#anxietyG)" strokeWidth={2} connectNulls />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -308,7 +308,7 @@ export default function MoodPage() {
 
       {/* History */}
       {history.length > 0 && (
-        <div className="glass-card rounded-md p-4">
+        <div className="glass-card rounded-2xl p-4">
           <h3 className="font-semibold text-sm mb-3">История</h3>
           <div className="space-y-2">
             {history.map((log) => (

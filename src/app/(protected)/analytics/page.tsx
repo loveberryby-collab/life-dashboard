@@ -48,10 +48,10 @@ function shortDate(dateStr: string): string {
 
 const chartTooltipStyle = {
   contentStyle: {
-    background: 'rgba(6, 24, 38, 0.95)',
-    border: '1px solid rgba(88,201,243,0.12)',
+    background: 'rgba(10, 25, 48, 0.95)',
+    border: '1px solid rgba(90,140,200,0.12)',
     borderRadius: '6px',
-    color: '#BDE5FF',
+    color: '#8EC5F0',
     fontSize: '12px',
   },
 }
@@ -175,7 +175,7 @@ export default function AnalyticsPage() {
             variant={period === p ? 'default' : 'outline'}
             size="sm"
             onClick={() => setPeriod(p)}
-            className="rounded-md"
+            className="rounded-2xl"
           >
             {PERIOD_LABELS[p]}
           </Button>
@@ -192,30 +192,30 @@ export default function AnalyticsPage() {
         </div>
 
         <div className="grid grid-cols-3 gap-3 mb-4">
-          <div className="glass-card rounded-md p-4 text-center">
+          <div className="glass-card rounded-2xl p-4 text-center">
             <p className="text-2xl font-bold text-primary">{tasksCompletionRate}%</p>
             <p className="text-xs text-muted-foreground mt-1">Выполнение</p>
           </div>
-          <div className="glass-card rounded-md p-4 text-center">
+          <div className="glass-card rounded-2xl p-4 text-center">
             <p className="text-2xl font-bold">{tasksCompleted}</p>
             <p className="text-xs text-muted-foreground mt-1">Выполнено</p>
           </div>
-          <div className="glass-card rounded-md p-4 text-center">
+          <div className="glass-card rounded-2xl p-4 text-center">
             <p className="text-2xl font-bold">{tasksTotal}</p>
             <p className="text-xs text-muted-foreground mt-1">Всего задач</p>
           </div>
         </div>
 
-        <div className="glass-card rounded-md p-4">
+        <div className="glass-card rounded-2xl p-4">
           <p className="text-sm text-muted-foreground mb-3">Задачи</p>
           <ResponsiveContainer width="100%" height={180}>
             <BarChart data={tasksChartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(88,201,243,0.06)" />
-              <XAxis dataKey="date" tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} allowDecimals={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(90,140,200,0.06)" />
+              <XAxis dataKey="date" tick={{ fill: '#3D7CC0', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: '#3D7CC0', fontSize: 11 }} axisLine={false} tickLine={false} allowDecimals={false} />
               <Tooltip {...chartTooltipStyle} />
-              <Bar dataKey="total" name="Всего" fill="rgba(28,78,117,0.3)" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="done" name="Выполнено" fill="#58C9F3" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="total" name="Всего" fill="rgba(18,42,75,0.3)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="done" name="Выполнено" fill="#5BA3E6" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -230,21 +230,21 @@ export default function AnalyticsPage() {
           <h2 className="text-lg font-semibold">Привычки</h2>
         </div>
 
-        <div className="glass-card rounded-md p-4 mb-4">
+        <div className="glass-card rounded-2xl p-4 mb-4">
           <p className="text-sm text-muted-foreground mb-3">Выполнение (%)</p>
           <ResponsiveContainer width="100%" height={180}>
             <AreaChart data={habitCompletionData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(88,201,243,0.06)" />
-              <XAxis dataKey="date" tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, 100]} />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(90,140,200,0.06)" />
+              <XAxis dataKey="date" tick={{ fill: '#3D7CC0', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: '#3D7CC0', fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, 100]} />
               <Tooltip {...chartTooltipStyle} />
               <defs>
                 <linearGradient id="tealGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#2FA0C6" stopOpacity={0.4} />
-                  <stop offset="100%" stopColor="#2FA0C6" stopOpacity={0.05} />
+                  <stop offset="0%" stopColor="#3D7CC0" stopOpacity={0.4} />
+                  <stop offset="100%" stopColor="#3D7CC0" stopOpacity={0.05} />
                 </linearGradient>
               </defs>
-              <Area type="monotone" dataKey="pct" name="%" stroke="#2FA0C6" fill="url(#tealGrad)" strokeWidth={2} />
+              <Area type="monotone" dataKey="pct" name="%" stroke="#3D7CC0" fill="url(#tealGrad)" strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -261,7 +261,7 @@ export default function AnalyticsPage() {
         </div>
 
         {weightChartData.length > 1 ? (
-          <div className="glass-card rounded-md p-4">
+          <div className="glass-card rounded-2xl p-4">
             <div className="flex items-center gap-2 mb-3">
               <p className="text-sm text-muted-foreground">Динамика веса</p>
               {weightChartData.length >= 2 && (
@@ -284,22 +284,22 @@ export default function AnalyticsPage() {
             </div>
             <ResponsiveContainer width="100%" height={200}>
               <AreaChart data={weightChartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(88,201,243,0.06)" />
-                <XAxis dataKey="date" tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} domain={['dataMin - 1', 'dataMax + 1']} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(90,140,200,0.06)" />
+                <XAxis dataKey="date" tick={{ fill: '#3D7CC0', fontSize: 11 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: '#3D7CC0', fontSize: 11 }} axisLine={false} tickLine={false} domain={['dataMin - 1', 'dataMax + 1']} />
                 <Tooltip {...chartTooltipStyle} />
                 <defs>
                   <linearGradient id="aWeightGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#58C9F3" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="#58C9F3" stopOpacity={0.05} />
+                    <stop offset="0%" stopColor="#5BA3E6" stopOpacity={0.4} />
+                    <stop offset="100%" stopColor="#5BA3E6" stopOpacity={0.05} />
                   </linearGradient>
                 </defs>
-                <Area type="monotone" dataKey="weight" name="Вес (кг)" stroke="#58C9F3" fill="url(#aWeightGrad)" strokeWidth={2} />
+                <Area type="monotone" dataKey="weight" name="Вес (кг)" stroke="#5BA3E6" fill="url(#aWeightGrad)" strokeWidth={2} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         ) : (
-          <div className="glass-card rounded-md p-8 text-center">
+          <div className="glass-card rounded-2xl p-8 text-center">
             <p className="text-muted-foreground">Недостаточно данных о весе для графика</p>
           </div>
         )}
@@ -315,45 +315,45 @@ export default function AnalyticsPage() {
         </div>
 
         <div className="grid grid-cols-3 gap-3 mb-4">
-          <div className="glass-card rounded-md p-3 text-center">
+          <div className="glass-card rounded-2xl p-3 text-center">
             <p className="text-lg font-bold text-blue-300">{avgMood}</p>
             <p className="text-xs text-muted-foreground mt-1">Настроение</p>
           </div>
-          <div className="glass-card rounded-md p-3 text-center">
+          <div className="glass-card rounded-2xl p-3 text-center">
             <p className="text-lg font-bold text-teal-400">{avgEnergy}</p>
             <p className="text-xs text-muted-foreground mt-1">Энергия</p>
           </div>
-          <div className="glass-card rounded-md p-3 text-center">
+          <div className="glass-card rounded-2xl p-3 text-center">
             <p className="text-lg font-bold text-sky-400">{avgAnxiety}</p>
             <p className="text-xs text-muted-foreground mt-1">Тревожность</p>
           </div>
         </div>
 
-        <div className="glass-card rounded-md p-4">
+        <div className="glass-card rounded-2xl p-4">
           <p className="text-sm text-muted-foreground mb-3">Тренды настроения</p>
           <ResponsiveContainer width="100%" height={200}>
             <AreaChart data={moodChartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(88,201,243,0.06)" />
-              <XAxis dataKey="date" tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, 10]} />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(90,140,200,0.06)" />
+              <XAxis dataKey="date" tick={{ fill: '#3D7CC0', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: '#3D7CC0', fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, 10]} />
               <Tooltip {...chartTooltipStyle} />
               <defs>
                 <linearGradient id="aMoodGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#58C9F3" stopOpacity={0.3} />
-                  <stop offset="100%" stopColor="#58C9F3" stopOpacity={0.05} />
+                  <stop offset="0%" stopColor="#5BA3E6" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="#5BA3E6" stopOpacity={0.05} />
                 </linearGradient>
                 <linearGradient id="aEnergyGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#2FA0C6" stopOpacity={0.3} />
-                  <stop offset="100%" stopColor="#2FA0C6" stopOpacity={0.05} />
+                  <stop offset="0%" stopColor="#3D7CC0" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="#3D7CC0" stopOpacity={0.05} />
                 </linearGradient>
                 <linearGradient id="aAnxietyGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#BDE5FF" stopOpacity={0.3} />
-                  <stop offset="100%" stopColor="#BDE5FF" stopOpacity={0.05} />
+                  <stop offset="0%" stopColor="#8EC5F0" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="#8EC5F0" stopOpacity={0.05} />
                 </linearGradient>
               </defs>
-              <Area type="monotone" dataKey="mood" name="Настроение" stroke="#58C9F3" fill="url(#aMoodGrad)" strokeWidth={2} connectNulls />
-              <Area type="monotone" dataKey="energy" name="Энергия" stroke="#2FA0C6" fill="url(#aEnergyGrad)" strokeWidth={2} connectNulls />
-              <Area type="monotone" dataKey="anxiety" name="Тревожность" stroke="#BDE5FF" fill="url(#aAnxietyGrad)" strokeWidth={2} connectNulls />
+              <Area type="monotone" dataKey="mood" name="Настроение" stroke="#5BA3E6" fill="url(#aMoodGrad)" strokeWidth={2} connectNulls />
+              <Area type="monotone" dataKey="energy" name="Энергия" stroke="#3D7CC0" fill="url(#aEnergyGrad)" strokeWidth={2} connectNulls />
+              <Area type="monotone" dataKey="anxiety" name="Тревожность" stroke="#8EC5F0" fill="url(#aAnxietyGrad)" strokeWidth={2} connectNulls />
             </AreaChart>
           </ResponsiveContainer>
         </div>

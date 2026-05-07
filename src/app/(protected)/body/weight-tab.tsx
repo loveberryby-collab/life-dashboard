@@ -106,7 +106,7 @@ export default function WeightTab() {
   return (
     <div>
       {/* Last weight */}
-      <div className="glass-card rounded-md mb-4">
+      <div className="glass-card rounded-2xl mb-4">
         <div className="p-6 text-center">
           {latest ? (
             <>
@@ -130,27 +130,27 @@ export default function WeightTab() {
         </div>
       </div>
 
-      <Button onClick={openCreate} className="w-full rounded-md gap-1 mb-4">
+      <Button onClick={openCreate} className="w-full rounded-2xl gap-1 mb-4">
         <Plus className="w-4 h-4" /> Записать вес
       </Button>
 
       {/* Weight chart */}
       {logs.length > 1 && (
-        <div className="glass-card rounded-md p-4 mb-4">
+        <div className="glass-card rounded-2xl p-4 mb-4">
           <p className="text-sm text-muted-foreground mb-3">Динамика веса</p>
           <ResponsiveContainer width="100%" height={200}>
             <AreaChart data={[...logs].reverse().map((l) => ({ date: formatDateShort(l.date), weight: Number(l.weight) }))}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(88,201,243,0.08)" />
-              <XAxis dataKey="date" tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#2FA0C6', fontSize: 11 }} axisLine={false} tickLine={false} domain={['dataMin - 1', 'dataMax + 1']} />
-              <Tooltip contentStyle={{ background: 'rgba(6,24,38,0.95)', border: '1px solid rgba(88,201,243,0.12)', borderRadius: '6px', color: '#BDE5FF', fontSize: '12px' }} />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(90,140,200,0.08)" />
+              <XAxis dataKey="date" tick={{ fill: '#3D7CC0', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: '#3D7CC0', fontSize: 11 }} axisLine={false} tickLine={false} domain={['dataMin - 1', 'dataMax + 1']} />
+              <Tooltip contentStyle={{ background: 'rgba(10,25,48,0.95)', border: '1px solid rgba(90,140,200,0.12)', borderRadius: '6px', color: '#8EC5F0', fontSize: '12px' }} />
               <defs>
                 <linearGradient id="weightGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#58C9F3" stopOpacity={0.3} />
-                  <stop offset="100%" stopColor="#58C9F3" stopOpacity={0.05} />
+                  <stop offset="0%" stopColor="#5BA3E6" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="#5BA3E6" stopOpacity={0.05} />
                 </linearGradient>
               </defs>
-              <Area type="monotone" dataKey="weight" name="Вес (кг)" stroke="#58C9F3" fill="url(#weightGrad)" strokeWidth={2} />
+              <Area type="monotone" dataKey="weight" name="Вес (кг)" stroke="#5BA3E6" fill="url(#weightGrad)" strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -158,7 +158,7 @@ export default function WeightTab() {
 
       {/* History */}
       {logs.length > 0 && (
-        <div className="glass-card rounded-md">
+        <div className="glass-card rounded-2xl">
           <div className="p-4">
             <h3 className="font-semibold text-sm mb-3">История</h3>
             <div className="space-y-2">
@@ -185,24 +185,24 @@ export default function WeightTab() {
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="rounded-md glass-strong border-white/[0.1]">
+        <DialogContent className="rounded-2xl glass-strong border-white/[0.1]">
           <DialogHeader>
             <DialogTitle>{editingLog ? 'Редактировать запись' : 'Записать вес'}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
               <Label>Дата</Label>
-              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="rounded-md bg-white/[0.06] border-white/[0.1]" />
+              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="rounded-2xl bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="space-y-2">
               <Label>Вес (кг)</Label>
-              <Input type="number" step="0.1" value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="65.0" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
+              <Input type="number" step="0.1" value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="65.0" className="rounded-2xl bg-white/[0.06] border-white/[0.1]" />
             </div>
             <div className="space-y-2">
               <Label>Заметка</Label>
-              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-md bg-white/[0.06] border-white/[0.1]" />
+              <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Необязательно" className="rounded-2xl bg-white/[0.06] border-white/[0.1]" />
             </div>
-            <Button onClick={handleSave} className="w-full rounded-md">
+            <Button onClick={handleSave} className="w-full rounded-2xl">
               {editingLog ? 'Сохранить' : 'Записать'}
             </Button>
           </div>

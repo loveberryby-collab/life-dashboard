@@ -48,9 +48,9 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="w-full max-w-md glass-card rounded-md p-8 glow-teal">
+      <div className="w-full max-w-md glass-card rounded-2xl p-8 glow-teal">
         <div className="text-center space-y-2 mb-6">
-          <div className="mx-auto w-14 h-14 rounded-md flex items-center justify-center gradient-teal glow-teal">
+          <div className="mx-auto w-14 h-14 rounded-2xl flex items-center justify-center gradient-teal glow-teal">
             <Snowflake className="w-7 h-7 text-sky-200" />
           </div>
           <h1 className="text-2xl font-bold text-foreground mt-4">Регистрация</h1>
@@ -66,7 +66,7 @@ export default function RegisterPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="rounded-md bg-white/[0.06] border-white/[0.1] focus:border-primary/50 placeholder:text-muted-foreground/50"
+              className="rounded-2xl bg-white/[0.06] border-white/[0.1] focus:border-primary/50 placeholder:text-muted-foreground/50"
             />
           </div>
           <div className="space-y-2">
@@ -78,7 +78,7 @@ export default function RegisterPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="rounded-md bg-white/[0.06] border-white/[0.1] focus:border-primary/50 placeholder:text-muted-foreground/50"
+              className="rounded-2xl bg-white/[0.06] border-white/[0.1] focus:border-primary/50 placeholder:text-muted-foreground/50"
             />
           </div>
           <div className="space-y-2">
@@ -90,11 +90,11 @@ export default function RegisterPage() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="rounded-md bg-white/[0.06] border-white/[0.1] focus:border-primary/50 placeholder:text-muted-foreground/50"
+              className="rounded-2xl bg-white/[0.06] border-white/[0.1] focus:border-primary/50 placeholder:text-muted-foreground/50"
             />
           </div>
           {error && <p className="text-sm text-destructive">{error}</p>}
-          <Button type="submit" className="w-full rounded-md bg-primary hover:bg-primary/90 shadow-[0_0_15px_rgba(88,201,243,0.15)]" disabled={loading}>
+          <Button type="submit" className="w-full rounded-2xl bg-primary hover:bg-primary/90 shadow-[0_0_15px_rgba(90,140,200,0.15)]" disabled={loading}>
             {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
             Создать аккаунт
           </Button>

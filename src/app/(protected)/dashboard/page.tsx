@@ -118,10 +118,10 @@ export default function DashboardPage() {
         {cards.map((card) => (
           <div
             key={card.href}
-            className={`glass-card rounded-md p-6 cursor-pointer hover:scale-[1.02] transition-all duration-300 ${card.glow}`}
+            className={`glass-card-elevated rounded-2xl p-6 cursor-pointer hover:scale-[1.02] transition-all duration-300 ${card.glow}`}
             onClick={() => router.push(card.href)}
           >
-            <div className={`w-12 h-12 rounded-md flex items-center justify-center ${card.gradient} mb-4`}>
+            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${card.gradient} mb-4`}>
               <card.icon className={`w-6 h-6 ${card.iconColor}`} />
             </div>
             <h3 className="font-semibold text-foreground text-lg">{card.title}</h3>
