@@ -35,10 +35,14 @@ create table if not exists habits (
   frequency text default 'daily',
   color text,
   icon text,
+  scheduled_time time,
   is_active boolean default true,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
+
+-- Run this if habits table already exists:
+-- alter table habits add column if not exists scheduled_time time;
 
 alter table habits enable row level security;
 

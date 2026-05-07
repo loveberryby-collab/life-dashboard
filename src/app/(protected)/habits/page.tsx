@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Progress } from '@/components/ui/progress'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Plus, Trash2, Pencil, Loader2, Check } from 'lucide-react'
+import { Plus, Trash2, Pencil, Loader2, Check, Clock } from 'lucide-react'
 import { toast } from 'sonner'
 import { getToday, formatDateRu } from '@/lib/utils/date'
 
@@ -19,6 +19,7 @@ interface Habit {
   color: string | null
   icon: string | null
   is_active: boolean
+  scheduled_time: string | null
 }
 
 interface HabitLog {
@@ -45,7 +46,7 @@ function getLast28Days(): string[] {
   return days
 }
 
-const HABIT_COLORS = ['#5BA3E6', '#3D7CC0', '#8EC5F0', '#1E3D6B', '#7DD8F8', '#3BB5D9']
+const HABIT_COLORS = ['#5BA3E6', '#A78BFA', '#F472B6', '#38BDF8', '#FBBF24', '#34D399', '#3D7CC0', '#8EC5F0']
 
 export default function HabitsPage() {
   const [habits, setHabits] = useState<Habit[]>([])
@@ -56,6 +57,7 @@ export default function HabitsPage() {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [color, setColor] = useState(HABIT_COLORS[0])
+  const [scheduledTime, setScheduledTime] = useState('')
   const [reloadKey, setReloadKey] = useState(0)
   const [calendarLogs, setCalendarLogs] = useState<CalendarLog[]>([])
   const supabase = createClient()
@@ -67,12 +69,18 @@ export default function HabitsPage() {
     async function fetchData() {
       setLoading(true)
       const [habitsRes, logsRes, calRes] = await Promise.all([
-        supabase.from('habits').select('*').eq('is_active', true).order('created_at'),
+        supabase.from('habits').select('*').eq('is_active', true).order('scheduled_time', { ascending: true, nullsFirst: false }),
         supabase.from('habit_logs').select('habit_id, is_completed').eq('date', today),
         supabase.from('habit_logs').select('habit_id, date, is_completed').gte('date', last28[0]).lte('date', last28[last28.length - 1]),
       ])
       if (!cancelled) {
-        setHabits(habitsRes.data ?? [])
+        const sortedHabits = (habitsRes.data ?? []).sort((a: Habit, b: Habit) => {
+          if (!a.scheduled_time && !b.scheduled_time) return 0
+          if (!a.scheduled_time) return 1
+          if (!b.scheduled_time) return -1
+          return a.scheduled_time.localeCompare(b.scheduled_time)
+        })
+        setHabits(sortedHabits)
         setLogs(logsRes.data ?? [])
         setCalendarLogs(calRes.data ?? [])
         setLoading(false)
@@ -87,6 +95,7 @@ export default function HabitsPage() {
     setTitle('')
     setDescription('')
     setColor(HABIT_COLORS[0])
+    setScheduledTime('')
     setDialogOpen(true)
   }
 
@@ -95,22 +104,50 @@ export default function HabitsPage() {
     setTitle(h.title)
     setDescription(h.description ?? '')
     setColor(h.color ?? HABIT_COLORS[0])
+    setScheduledTime(h.scheduled_time ?? '')
     setDialogOpen(true)
   }
 
   async function handleSave() {
     if (!title.trim()) return
 
+    const payload: Record<string, unknown> = {
+      title,
+      description: description || null,
+      color,
+      updated_at: new Date().toISOString(),
+    }
+    if (scheduledTime) {
+      payload.scheduled_time = scheduledTime
+    } else {
+      payload.scheduled_time = null
+    }
+
     if (editingHabit) {
-      await supabase
-        .from('habits')
-        .update({ title, description: description || null, color, updated_at: new Date().toISOString() })
-        .eq('id', editingHabit.id)
+      const { error } = await supabase.from('habits').update(payload).eq('id', editingHabit.id)
+      if (error) {
+        if (error.message.includes('scheduled_time')) {
+          delete payload.scheduled_time
+          await supabase.from('habits').update(payload).eq('id', editingHabit.id)
+        } else {
+          toast.error('Ошибка: ' + error.message)
+          return
+        }
+      }
       toast.success('Привычка обновлена')
     } else {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
-      await supabase.from('habits').insert({ user_id: user.id, title, description: description || null, color })
+      const { error } = await supabase.from('habits').insert({ ...payload, user_id: user.id })
+      if (error) {
+        if (error.message.includes('scheduled_time')) {
+          delete payload.scheduled_time
+          await supabase.from('habits').insert({ ...payload, user_id: user.id })
+        } else {
+          toast.error('Ошибка: ' + error.message)
+          return
+        }
+      }
       toast.success('Привычка создана')
     }
     setDialogOpen(false)
@@ -194,9 +231,17 @@ export default function HabitsPage() {
                     )}
                   </button>
                   <div className="flex-1 min-w-0">
-                    <p className={`font-medium ${isCompleted ? 'line-through text-muted-foreground' : ''}`}>
-                      {habit.title}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className={`font-medium ${isCompleted ? 'line-through text-muted-foreground' : ''}`}>
+                        {habit.title}
+                      </p>
+                      {habit.scheduled_time && (
+                        <span className="flex items-center gap-0.5 text-xs text-muted-foreground">
+                          <Clock className="w-3 h-3" />
+                          {habit.scheduled_time.slice(0, 5)}
+                        </span>
+                      )}
+                    </div>
                     {habit.description && (
                       <p className="text-xs text-muted-foreground mt-0.5 truncate">{habit.description}</p>
                     )}
@@ -263,6 +308,17 @@ export default function HabitsPage() {
             <div className="space-y-2">
               <Label>Описание</Label>
               <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Необязательно" className="rounded-2xl bg-white/[0.06] border-white/[0.1]" />
+            </div>
+            <div className="space-y-2">
+              <Label>Время</Label>
+              <Input
+                type="time"
+                value={scheduledTime}
+                onChange={(e) => setScheduledTime(e.target.value)}
+                className="rounded-2xl bg-white/[0.06] border-white/[0.1]"
+                placeholder="Необязательно"
+              />
+              <p className="text-xs text-muted-foreground">Привычки сортируются по времени</p>
             </div>
             <div className="space-y-2">
               <Label>Цвет</Label>
